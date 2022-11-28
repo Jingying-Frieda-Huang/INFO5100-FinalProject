@@ -8,6 +8,7 @@ package Model;
  *
  * @author friedahuang
  */
+//try git
 public class Bank {
     
 }
