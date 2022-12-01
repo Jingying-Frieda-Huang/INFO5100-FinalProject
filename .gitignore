@@ -1,0 +1,9 @@
+
+*.class
+*.class
+*.class
+build/classes/Model/CustomerService.class
+*.class
+dist/README.TXT
+dist/INFO5100FinalProject.jar
+build/built-jar.properties
