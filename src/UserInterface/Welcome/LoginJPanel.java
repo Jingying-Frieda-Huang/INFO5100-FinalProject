@@ -5,6 +5,8 @@
 package UserInterface.Welcome;
 
 import UserInterface.EventOrganizer.EventOrganizerMainPage;
+import UserInterface.Sponsor.SponsorMain;
+import UserInterface.VenueOwner.VenueOwnerMain;
 import javax.swing.JPanel;
 
 /**
@@ -117,12 +119,20 @@ public class LoginJPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        EventOrganizerMainPage eventOrganizerMainPage;
-        eventOrganizerMainPage = new EventOrganizerMainPage(CardSequencePanel);
-        CardSequencePanel.removeAll();
-        CardSequencePanel.add("eventOrganizer", eventOrganizerMainPage);
-        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+//        EventOrganizerMainPage eventOrganizerMainPage;
+//        eventOrganizerMainPage = new EventOrganizerMainPage(CardSequencePanel);
+        
+//        VenueOwnerMain venueOwnerMain = new VenueOwnerMain(CardSequencePanel);
+//        CardSequencePanel.removeAll();
+//        CardSequencePanel.add("Venue Owner", venueOwnerMain);
 
+//        CardSequencePanel.add("eventOrganizer", eventOrganizerMainPage);
+//        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+
+        SponsorMain sponsorMain = new SponsorMain(CardSequencePanel);
+        CardSequencePanel.removeAll();
+        CardSequencePanel.add("Sponsor", sponsorMain);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
     }//GEN-LAST:event_jButton1ActionPerformed
 
 
