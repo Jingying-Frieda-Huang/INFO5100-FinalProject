@@ -9,5 +9,5 @@ package Model;
  * @author friedahuang
  */
 public class VenueOwner {
-    
+    Profile profile; 
 }

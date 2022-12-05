@@ -4,10 +4,15 @@
  */
 package Model;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author friedahuang
  */
 public class Volunteer {
-    
+
+    Profile profile;
+    ArrayList<Event> events;
+
 }

@@ -9,5 +9,29 @@ package Model;
  * @author friedahuang
  */
 public class Person {
-    
+    String name;
+    String id;
+
+    public String getPersonName() {
+        return name;
+    }
+
+    public Person(String name, String id) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public String getPersonId() {
+        return id;
+    }
+
+    public boolean isMatch(String id) {
+        return getPersonId().equals(id);
+
+    }
+
+    @Override
+    public String toString() {
+        return getPersonId();
+    }
 }
