@@ -4,6 +4,21 @@
  */
 package UserInterface.TicketManager;
 
+import Model.Event;
+import Model.TicketManager.PaymentRecord;
+import Model.TicketManager.Ticket;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JPanel;
+
+import java.sql.*;  
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+
 /**
  *
  * @author evelynzu
@@ -13,8 +28,50 @@ public class TicketGenerate extends javax.swing.JPanel {
     /**
      * Creates new form TicketGenerate
      */
-    public TicketGenerate() {
+    javax.swing.JPanel CardSequencePanel;
+    
+    ArrayList<PaymentRecord> paymentRecords;
+    DefaultTableModel model;
+    TableRowSorter myTableRowSorter;
+    PaymentRecord selectedRecord;
+    Event eventExample;
+    
+    public TicketGenerate(JPanel clp) {
+        this.CardSequencePanel = clp;
+        
+        
+        paymentRecords= new ArrayList<>();
+        
         initComponents();
+        
+        
+        
+        try{  
+            Class.forName("com.mysql.cj.jdbc.Driver");  
+            Connection con=DriverManager.getConnection(  
+            "jdbc:mysql://localhost:3306/final5100","root","root");  
+            //here sonoo is database name, root is username and password  
+            Statement stmt=con.createStatement();  
+            ResultSet rs=stmt.executeQuery("select * from record");  
+            
+//            while(rs.next())  
+//            System.out.println(rs.getInt(1)+"  "+rs.getString(2)+"  "+rs.getString(3));  
+            while(rs.next()) {
+                PaymentRecord paymentRecord = new PaymentRecord();
+                paymentRecord.setId(rs.getString("record_id"));
+                
+                paymentRecord.setEvent(rs.getString("event_id"));
+                paymentRecord.setCustomer(rs.getString("customer_id"));
+                System.out.println(paymentRecord.getId());
+                paymentRecords.add(paymentRecord);
+            }
+
+            rs.close();
+            con.close();  
+            }catch(Exception e){ System.out.println(e);}  
+        
+           populatePaymentRecordTable(); 
+        
     }
 
     /**
@@ -27,12 +84,12 @@ public class TicketGenerate extends javax.swing.JPanel {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        tblPaymentRecord = new javax.swing.JTable();
+        btnGenerateTicket = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblPaymentRecord.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -51,9 +108,19 @@ public class TicketGenerate extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        tblPaymentRecord.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblPaymentRecordMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblPaymentRecord);
 
-        jButton1.setText("Generate Ticket");
+        btnGenerateTicket.setText("Generate Ticket");
+        btnGenerateTicket.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerateTicketActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Search");
 
@@ -62,12 +129,12 @@ public class TicketGenerate extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(46, 46, 46)
+                .addContainerGap(34, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addComponent(btnGenerateTicket)
                         .addGap(74, 74, 74))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -78,27 +145,69 @@ public class TicketGenerate extends javax.swing.JPanel {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(65, 65, 65)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(101, 101, 101)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton2)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(101, 101, 101)
-                        .addComponent(jButton1)))
-                .addContainerGap(74, Short.MAX_VALUE))
+                .addGap(101, 101, 101)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(101, 101, 101)
+                .addComponent(btnGenerateTicket)
+                .addContainerGap(166, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(47, 47, 47))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnGenerateTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateTicketActionPerformed
+        Ticket ticket = new Ticket();
+        ticket.setId(selectedRecord.getEvent()+selectedRecord.getCustomer());
+        ticket.setCustomerId(selectedRecord.getCustomer());
+        ticket.setEventId(selectedRecord.getEvent());
+        
+                try{  
+            Class.forName("com.mysql.cj.jdbc.Driver");  
+            Connection con=DriverManager.getConnection(  
+            "jdbc:mysql://localhost:3306/final5100","root","root");  
+            //here sonoo is database name, root is username and password  
+            String query = " insert into ticket (ticket_id, customer_id, event_id)"
+        + " values ("+ticket.getId()+","+ ticket.getCustomerId()+ "," + ticket.getEventId()+")";  
+            PreparedStatement preparedStmt = con.prepareStatement(query);  
+            
+            preparedStmt.execute();
+            con.close();  
+            }catch(Exception e){ System.out.println(e);}  
+            JOptionPane.showMessageDialog(this, "Ticket generated successfully");
+    }//GEN-LAST:event_btnGenerateTicketActionPerformed
+
+    private void tblPaymentRecordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPaymentRecordMouseClicked
+        int selectedRowIndex = tblPaymentRecord.getSelectedRow();
+        DefaultTableModel model = (DefaultTableModel) tblPaymentRecord.getModel();
+        selectedRecord = (PaymentRecord)model.getValueAt(tblPaymentRecord.convertRowIndexToModel(selectedRowIndex), 0); 
+        
+    }//GEN-LAST:event_tblPaymentRecordMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnGenerateTicket;
     private javax.swing.JButton jButton2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable tblPaymentRecord;
     // End of variables declaration//GEN-END:variables
+
+    public void populatePaymentRecordTable() {
+        model = (DefaultTableModel) tblPaymentRecord.getModel();
+        model.setRowCount(0);
+        for(PaymentRecord pr: paymentRecords) {
+            Object[] row = new Object[3];
+            row[0] = pr;
+            row[1] = pr.getEvent();
+            row[2] = pr.getCustomer();
+            model.addRow(row);
+        }
+    }
+    
+    
+
 }

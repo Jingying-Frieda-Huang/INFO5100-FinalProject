@@ -2,7 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Model;
+package Model.TicketManager;
+
+import Model.Date;
+import Model.Event;
 
 /**
  *
@@ -12,7 +15,18 @@ public class Ticket {
     String id;
     double price;
     Date date;
-    Event event; 
+    Event event;
+    String eventId;
+    String customerId;
+    
+    public Ticket(String id, String customerId, String eventId){
+        this.id = id;
+        this.eventId = eventId;
+        this.customerId = customerId;
+        
+    }
+    
+    public Ticket(){}
 
     public Ticket(double price, Event event, Date date, String id) {
         this.id = id;
@@ -52,5 +66,22 @@ public class Ticket {
     public void setId(String id) {
         this.id = id;
     }
+
+    public String getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
+    }
+
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+    
     
 }
