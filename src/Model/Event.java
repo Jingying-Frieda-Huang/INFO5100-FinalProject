@@ -4,6 +4,7 @@
  */
 package Model;
 
+import Model.TicketManager.Ticket;
 import java.util.ArrayList;
 
 /**
