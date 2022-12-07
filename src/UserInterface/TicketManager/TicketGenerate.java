@@ -34,7 +34,7 @@ public class TicketGenerate extends javax.swing.JPanel {
     DefaultTableModel model;
     TableRowSorter myTableRowSorter;
     PaymentRecord selectedRecord;
-    Event eventExample;
+//    Event eventExample;
     
     public TicketGenerate(JPanel clp) {
         this.CardSequencePanel = clp;
@@ -45,32 +45,10 @@ public class TicketGenerate extends javax.swing.JPanel {
         initComponents();
         
         
+        dbGetPaymentRecord();
         
-        try{  
-            Class.forName("com.mysql.cj.jdbc.Driver");  
-            Connection con=DriverManager.getConnection(  
-            "jdbc:mysql://localhost:3306/final5100","root","root");  
-            //here sonoo is database name, root is username and password  
-            Statement stmt=con.createStatement();  
-            ResultSet rs=stmt.executeQuery("select * from record");  
-            
-//            while(rs.next())  
-//            System.out.println(rs.getInt(1)+"  "+rs.getString(2)+"  "+rs.getString(3));  
-            while(rs.next()) {
-                PaymentRecord paymentRecord = new PaymentRecord();
-                paymentRecord.setId(rs.getString("record_id"));
-                
-                paymentRecord.setEvent(rs.getString("event_id"));
-                paymentRecord.setCustomer(rs.getString("customer_id"));
-                System.out.println(paymentRecord.getId());
-                paymentRecords.add(paymentRecord);
-            }
-
-            rs.close();
-            con.close();  
-            }catch(Exception e){ System.out.println(e);}  
         
-           populatePaymentRecordTable(); 
+        populatePaymentRecordTable(); 
         
     }
 
@@ -165,7 +143,7 @@ public class TicketGenerate extends javax.swing.JPanel {
         ticket.setCustomerId(selectedRecord.getCustomer());
         ticket.setEventId(selectedRecord.getEvent());
         
-                try{  
+            try{  
             Class.forName("com.mysql.cj.jdbc.Driver");  
             Connection con=DriverManager.getConnection(  
             "jdbc:mysql://localhost:3306/final5100","root","root");  
@@ -206,6 +184,32 @@ public class TicketGenerate extends javax.swing.JPanel {
             row[2] = pr.getCustomer();
             model.addRow(row);
         }
+    }
+    
+    public void dbGetPaymentRecord(){
+        try{  
+            Class.forName("com.mysql.cj.jdbc.Driver");  
+            Connection con=DriverManager.getConnection(  
+            "jdbc:mysql://localhost:3306/final5100","root","root");  
+            //here sonoo is database name, root is username and password  
+            Statement stmt=con.createStatement();  
+            ResultSet rs=stmt.executeQuery("select * from record");  
+            
+//            while(rs.next())  
+//            System.out.println(rs.getInt(1)+"  "+rs.getString(2)+"  "+rs.getString(3));  
+            while(rs.next()) {
+                PaymentRecord paymentRecord = new PaymentRecord();
+                paymentRecord.setId(rs.getString("record_id"));
+                
+                paymentRecord.setEvent(rs.getString("event_id"));
+                paymentRecord.setCustomer(rs.getString("customer_id"));
+                System.out.println(paymentRecord.getId());
+                paymentRecords.add(paymentRecord);
+            }
+
+            rs.close();
+            con.close();  
+            }catch(Exception e){ System.out.println(e);}  
     }
     
     
