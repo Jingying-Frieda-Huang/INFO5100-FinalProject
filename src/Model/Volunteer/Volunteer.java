@@ -6,6 +6,7 @@ package Model.Volunteer;
 
 import Model.Event;
 import Model.Profile;
+import Model.UserAccount;
 import java.util.ArrayList;
 
 /**
@@ -14,14 +15,35 @@ import java.util.ArrayList;
  */
 public class Volunteer {
 
-    Profile profile;
-    ArrayList<Event> events;
+    UserAccount userAccount;
+    ArrayList<Event> history;
 
-    public Volunteer(Profile profile, ArrayList<Event> events) {
-        this.profile = profile;
-        this.events = events;
+    public Volunteer(UserAccount userAccount, ArrayList<Event> history) {
+        this.userAccount = userAccount;
+        this.history = history;
+    }
+    
+    public Volunteer(UserAccount userAccount) {
+        this.userAccount = userAccount;
     }
 
+    public UserAccount getUserAccount() {
+        return userAccount;
+    }
+
+    public void setUserAccount(UserAccount userAccount) {
+        this.userAccount = userAccount;
+    }
+
+    public ArrayList<Event> getHistory() {
+        return history;
+    }
+
+    public void setHistory(ArrayList<Event> history) {
+        this.history = history;
+    }
+
+    
     
     
 }
