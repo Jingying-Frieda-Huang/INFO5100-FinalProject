@@ -9,5 +9,14 @@ package Model;
  * @author friedahuang
  */
 public class CustomerService {
+    String tel; 
+
+    public CustomerService(String tel) {
+        this.tel = tel;
+    }
     
+    public String fileComplaint(String subject, String note, String sender) {
+        // send sms
+        return "";
+    }
 }
