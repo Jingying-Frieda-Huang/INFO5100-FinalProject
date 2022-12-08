@@ -9,6 +9,7 @@ package Model;
  * @author friedahuang
  */
 public class Venue {
+    private int id;
     private String name;
     private String location;
     private int capacity;
@@ -24,6 +25,14 @@ public class Venue {
     }
 
     public Venue() {
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {

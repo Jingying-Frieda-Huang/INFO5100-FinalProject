@@ -12,8 +12,17 @@ public class Sponsor {
     private int lic_no;
     private String name;
     private String business_type;
+    private Date est_date;
 
     public Sponsor() {
+    }
+
+    public Date getEst_date() {
+        return est_date;
+    }
+
+    public void setEst_date(Date est_date) {
+        this.est_date = est_date;
     }
 
     public int getLic_no() {
