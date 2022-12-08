@@ -6,8 +6,11 @@ package UserInterface.Volunteer;
 
 import Model.Event;
 import Model.TicketManager.PaymentRecord;
+import Model.Volunteer.Volunteer;
+import java.awt.Cursor;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -31,16 +34,19 @@ public class VolunteerMain extends javax.swing.JPanel {
     TableRowSorter myTableRowSorter;
     Event selectedEvent;
     ArrayList<Event> events;
+    Volunteer volunteer;
     
     
-    public VolunteerMain(JPanel clp) {
+    public VolunteerMain(JPanel clp, Volunteer volunteer) {
         this.CardSequencePanel = clp;
+        this.volunteer = volunteer;
         initComponents();
         
         events = new ArrayList<>();
         dbGetEvent();
         populateEventTable();
         sort(model);
+        lbVTHistory.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
 
     /**
@@ -57,6 +63,7 @@ public class VolunteerMain extends javax.swing.JPanel {
         Join = new javax.swing.JButton();
         btnSearch = new javax.swing.JButton();
         tfSearch = new javax.swing.JTextField();
+        lbVTHistory = new javax.swing.JLabel();
 
         tblEvent.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -98,6 +105,13 @@ public class VolunteerMain extends javax.swing.JPanel {
             }
         });
 
+        lbVTHistory.setText("View my volunteer history");
+        lbVTHistory.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lbVTHistoryMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -105,23 +119,28 @@ public class VolunteerMain extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(83, 83, 83)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 463, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(138, 138, 138)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(Join)
                             .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(36, 36, 36)
-                        .addComponent(btnSearch)))
-                .addContainerGap(100, Short.MAX_VALUE))
+                        .addComponent(btnSearch))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(lbVTHistory))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(80, 80, 80)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 463, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(103, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(41, 41, 41)
+                .addGap(12, 12, 12)
+                .addComponent(lbVTHistory)
+                .addGap(34, 34, 34)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(40, 40, 40)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSearch)
                     .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -148,6 +167,7 @@ public class VolunteerMain extends javax.swing.JPanel {
             stmt.executeUpdate(sql);
             con.close();  
             }catch(Exception e){ System.out.println(e);}  
+        insertVolunteerHistory();
         populateEventTable();
     }//GEN-LAST:event_JoinActionPerformed
 
@@ -167,11 +187,20 @@ public class VolunteerMain extends javax.swing.JPanel {
         tblEvent.getRowSorter();
     }//GEN-LAST:event_btnSearchActionPerformed
 
+    private void lbVTHistoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbVTHistoryMouseClicked
+        
+        VolunteerHistory volunteerHistory = new VolunteerHistory(CardSequencePanel,volunteer);
+        CardSequencePanel.removeAll();
+        CardSequencePanel.add("Volunteer history", volunteerHistory);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+    }//GEN-LAST:event_lbVTHistoryMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Join;
     private javax.swing.JButton btnSearch;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lbVTHistory;
     private javax.swing.JTable tblEvent;
     private javax.swing.JTextField tfSearch;
     // End of variables declaration//GEN-END:variables
@@ -201,7 +230,7 @@ public class VolunteerMain extends javax.swing.JPanel {
     }
 
     
-        public void populateEventTable() {
+    public void populateEventTable() {
         model = (DefaultTableModel) tblEvent.getModel();
         model.setRowCount(0);
         for(Event event: events) {
@@ -214,10 +243,25 @@ public class VolunteerMain extends javax.swing.JPanel {
         }
     }
         
-        public void sort(DefaultTableModel model) {
+    public void sort(DefaultTableModel model) {
         myTableRowSorter = new TableRowSorter(model);
         tblEvent.setRowSorter(myTableRowSorter);
         
+    }
+
+    public void insertVolunteerHistory(){
+        try{  
+            Class.forName("com.mysql.cj.jdbc.Driver");  
+            Connection con=DriverManager.getConnection(  
+            "jdbc:mysql://localhost:3306/final5100","root","root");  
+            //here sonoo is database name, root is username and password  
+            String query = " insert into volunteer_history (user_id, event_id)"
+            + " values ('"+volunteer.getUserAccount().getUser_id()+"','"+ selectedEvent.getEvent_id() + "')";  
+            System.out.print(query);
+            PreparedStatement preparedStmt = con.prepareStatement(query);             
+            preparedStmt.execute();
+            con.close();  
+            }catch(Exception e){ System.out.println(e);}
     }
 
 }
