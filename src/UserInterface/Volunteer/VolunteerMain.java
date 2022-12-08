@@ -145,7 +145,7 @@ public class VolunteerMain extends javax.swing.JPanel {
             //here sonoo is database name, root is username and password  
             Statement stmt=con.createStatement();  
             
-            String sql = "UPDATE event " + "SET volunteer_capacity = '" + capacity + "' WHERE event_name = '" + selectedEvent.getEvent_id()+ "';";
+            String sql = "UPDATE event " + "SET volunteer_capacity = '" + capacity + "' WHERE event_id = '" + selectedEvent.getEvent_id()+ "';";
             System.out.print(sql);
             stmt.executeUpdate(sql);
 //            ResultSet rs = stmt.executeQuery(sql);
@@ -187,27 +187,19 @@ public class VolunteerMain extends javax.swing.JPanel {
         try{  
             Class.forName("com.mysql.cj.jdbc.Driver");  
             Connection con=DriverManager.getConnection(  
-            "jdbc:mysql://localhost:3306/final5100","root","root");  
-            //here sonoo is database name, root is username and password  
+            "jdbc:mysql://localhost:3306/final5100","root","root");   
             Statement stmt=con.createStatement();  
             ResultSet rs=stmt.executeQuery("select * from event");  
             
-//            while(rs.next())  
-//            System.out.println(rs.getInt(1)+"  "+rs.getString(2)+"  "+rs.getString(3));  
             while(rs.next()) {
                 Event event = new Event();
+                event.setEvent_id(Integer.valueOf(rs.getString("event_id")));
                 event.setName(rs.getString("event_name"));
                 event.setDate(rs.getDate("date"));
                 event.setLocation(rs.getNString("location"));
                 event.setVolunteerCapacity(rs.getString("volunteer_capacity"));
                 events.add(event);
                 
-//                PaymentRecord paymentRecord = new PaymentRecord();
-//                paymentRecord.setId(rs.getString("record_id"));
-//                paymentRecord.setEvent(rs.getString("event_id"));
-//                paymentRecord.setCustomer(rs.getString("customer_id"));
-//                System.out.println(paymentRecord.getId());
-//                paymentRecords.add(paymentRecord);
             }
 
             rs.close();

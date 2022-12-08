@@ -49,4 +49,35 @@ public class UserAccount {
     public void setRole(String role) {
         this.role = role;
     }
+    
+    
+    ////////////////////////////////////////////////////////to match the ui design in Framer
+    private String email;
+    private String name;
+
+    public UserAccount(String user_id, String name, String password, String role, String email) {
+        this.user_id = user_id;
+        this.name = name;
+        this.password = password;
+        this.role = role;
+        this.email = email;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    
 }
