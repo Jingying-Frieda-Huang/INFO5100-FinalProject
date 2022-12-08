@@ -16,6 +16,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -29,10 +30,11 @@ public class GeneratePaymentRecord extends javax.swing.JPanel {
      * Creates new form BankGeneratePaymentRecord
      */
     javax.swing.JPanel CardSequencePanel;
-    ArrayList<Payment> payments;
+    
     DefaultTableModel model;
     TableRowSorter myTableRowSorter;
     Payment selectedPayment;
+    ArrayList<Payment> payments;
     
     public GeneratePaymentRecord(JPanel clp) {
         this.CardSequencePanel = clp;
@@ -42,6 +44,7 @@ public class GeneratePaymentRecord extends javax.swing.JPanel {
         
         dbGetPayment();
         populatePaymentTable();
+        sort(model);
         
         
     }
@@ -58,6 +61,8 @@ public class GeneratePaymentRecord extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPayment = new javax.swing.JTable();
         btnGeneratePaymentRecord = new javax.swing.JButton();
+        tfSearch = new javax.swing.JTextField();
+        btnSearch = new javax.swing.JButton();
 
         tblPayment.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -92,27 +97,45 @@ public class GeneratePaymentRecord extends javax.swing.JPanel {
             }
         });
 
+        btnSearch.setText("Search");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(62, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 704, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(205, 205, 205))
             .addGroup(layout.createSequentialGroup()
-                .addGap(291, 291, 291)
-                .addComponent(btnGeneratePaymentRecord)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(34, 34, 34)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 530, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(btnSearch))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addGap(143, 143, 143)
+                            .addComponent(btnGeneratePaymentRecord))))
+                .addContainerGap(366, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(49, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(85, 85, 85)
-                .addComponent(btnGeneratePaymentRecord)
-                .addGap(48, 48, 48))
+                .addGap(34, 34, 34)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSearch))
+                .addGap(28, 28, 28)
+                .addComponent(btnGeneratePaymentRecord, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -144,11 +167,23 @@ public class GeneratePaymentRecord extends javax.swing.JPanel {
         
     }//GEN-LAST:event_tblPaymentMouseClicked
 
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        String text = tfSearch.getText();
+        if (text.trim().length() == 0) {
+     myTableRowSorter.setRowFilter(null);
+  } else {
+     myTableRowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+  }
+        tblPayment.getRowSorter();
+    }//GEN-LAST:event_btnSearchActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGeneratePaymentRecord;
+    private javax.swing.JButton btnSearch;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblPayment;
+    private javax.swing.JTextField tfSearch;
     // End of variables declaration//GEN-END:variables
 
     public void populatePaymentTable() {
@@ -163,6 +198,12 @@ public class GeneratePaymentRecord extends javax.swing.JPanel {
             row[4] = p.getMoney();
             model.addRow(row);
         }
+    }
+    
+    public void sort(DefaultTableModel model) {
+        myTableRowSorter = new TableRowSorter(model);
+        tblPayment.setRowSorter(myTableRowSorter);
+        
     }
     
     
