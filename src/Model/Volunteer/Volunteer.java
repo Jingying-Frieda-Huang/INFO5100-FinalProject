@@ -17,4 +17,11 @@ public class Volunteer {
     Profile profile;
     ArrayList<Event> events;
 
+    public Volunteer(Profile profile, ArrayList<Event> events) {
+        this.profile = profile;
+        this.events = events;
+    }
+
+    
+    
 }

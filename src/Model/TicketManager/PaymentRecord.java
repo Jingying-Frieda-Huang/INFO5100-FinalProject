@@ -13,13 +13,15 @@ public class PaymentRecord {
     String id;
     String event;
     String customer;
+    String state;
     
     public PaymentRecord() {}
 
-    public PaymentRecord(String id, String event, String customer) {
+    public PaymentRecord(String id, String event, String customer, String state) {
         this.id = id;
         this.event = event;
         this.customer = customer;
+        this.state = state;
     }
 
     public String getId() {
@@ -45,6 +47,16 @@ public class PaymentRecord {
     public void setCustomer(String customer) {
         this.customer = customer;
     }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+    
+    
     
     
     @Override

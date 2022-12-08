@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import java.sql.*;  
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -49,6 +50,7 @@ public class TicketGenerate extends javax.swing.JPanel {
         
         
         populatePaymentRecordTable(); 
+        sort(model);
         
     }
 
@@ -65,21 +67,21 @@ public class TicketGenerate extends javax.swing.JPanel {
         tblPaymentRecord = new javax.swing.JTable();
         btnGenerateTicket = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        tfSearch = new javax.swing.JTextField();
 
         tblPaymentRecord.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Record", "Event", "Customer"
+                "Record", "Event", "Customer", "State"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -101,6 +103,11 @@ public class TicketGenerate extends javax.swing.JPanel {
         });
 
         jButton2.setText("Search");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -115,7 +122,7 @@ public class TicketGenerate extends javax.swing.JPanel {
                         .addComponent(btnGenerateTicket)
                         .addGap(74, 74, 74))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(26, 26, 26)
                         .addComponent(jButton2)
                         .addGap(49, 49, 49))))
@@ -126,35 +133,48 @@ public class TicketGenerate extends javax.swing.JPanel {
                 .addGap(101, 101, 101)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(101, 101, 101)
                 .addComponent(btnGenerateTicket)
                 .addContainerGap(166, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(47, 47, 47))
+                .addGap(61, 61, 61))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGenerateTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateTicketActionPerformed
         Ticket ticket = new Ticket();
-        ticket.setId(selectedRecord.getEvent()+selectedRecord.getCustomer());
+        ticket.setId(selectedRecord.getId()+(int)(Math.random()*100+1));
         ticket.setCustomerId(selectedRecord.getCustomer());
         ticket.setEventId(selectedRecord.getEvent());
+        selectedRecord.setState("completed");
         
-            try{  
+        try{  
             Class.forName("com.mysql.cj.jdbc.Driver");  
             Connection con=DriverManager.getConnection(  
             "jdbc:mysql://localhost:3306/final5100","root","root");  
             //here sonoo is database name, root is username and password  
             String query = " insert into ticket (ticket_id, customer_id, event_id)"
-        + " values ("+ticket.getId()+","+ ticket.getCustomerId()+ "," + ticket.getEventId()+")";  
-            PreparedStatement preparedStmt = con.prepareStatement(query);  
-            
+            + " values ("+ticket.getId()+","+ ticket.getCustomerId()+ "," + ticket.getEventId()+")";  
+            PreparedStatement preparedStmt = con.prepareStatement(query);             
             preparedStmt.execute();
             con.close();  
+            }catch(Exception e){ System.out.println(e);}
+            
+        try{  
+            Class.forName("com.mysql.cj.jdbc.Driver");  
+            Connection con=DriverManager.getConnection(  
+            "jdbc:mysql://localhost:3306/final5100","root","root");  
+            Statement stmt=con.createStatement();             
+            String sql = "UPDATE record " + "SET state = '" + "completed" + "' WHERE record_id = '" + selectedRecord.getId()+ "';";
+            System.out.print(sql);
+            stmt.executeUpdate(sql);
+            con.close();  
             }catch(Exception e){ System.out.println(e);}  
+            
+            populatePaymentRecordTable();
             JOptionPane.showMessageDialog(this, "Ticket generated successfully");
     }//GEN-LAST:event_btnGenerateTicketActionPerformed
 
@@ -165,23 +185,34 @@ public class TicketGenerate extends javax.swing.JPanel {
         
     }//GEN-LAST:event_tblPaymentRecordMouseClicked
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+         String text = tfSearch.getText();
+        if (text.trim().length() == 0) {
+     myTableRowSorter.setRowFilter(null);
+  } else {
+     myTableRowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+  }
+        tblPaymentRecord.getRowSorter();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGenerateTicket;
     private javax.swing.JButton jButton2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTable tblPaymentRecord;
+    private javax.swing.JTextField tfSearch;
     // End of variables declaration//GEN-END:variables
 
     public void populatePaymentRecordTable() {
         model = (DefaultTableModel) tblPaymentRecord.getModel();
         model.setRowCount(0);
         for(PaymentRecord pr: paymentRecords) {
-            Object[] row = new Object[3];
+            Object[] row = new Object[4];
             row[0] = pr;
             row[1] = pr.getEvent();
             row[2] = pr.getCustomer();
+            row[3] = pr.getState();
             model.addRow(row);
         }
     }
@@ -203,6 +234,7 @@ public class TicketGenerate extends javax.swing.JPanel {
                 
                 paymentRecord.setEvent(rs.getString("event_id"));
                 paymentRecord.setCustomer(rs.getString("customer_id"));
+                paymentRecord.setState(rs.getString("state"));
                 System.out.println(paymentRecord.getId());
                 paymentRecords.add(paymentRecord);
             }
@@ -212,6 +244,10 @@ public class TicketGenerate extends javax.swing.JPanel {
             }catch(Exception e){ System.out.println(e);}  
     }
     
-    
+    public void sort(DefaultTableModel model) {
+        myTableRowSorter = new TableRowSorter(model);
+        tblPaymentRecord.setRowSorter(myTableRowSorter);
+        
+    }
 
 }
