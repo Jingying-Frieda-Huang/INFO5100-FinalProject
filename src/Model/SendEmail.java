@@ -8,15 +8,6 @@ package Model;
  *
  * @author friedahuang
  */
-public class CustomerService {
-    String tel; 
-
-    public CustomerService(String tel) {
-        this.tel = tel;
-    }
+public class SendEmail {
     
-    public String fileComplaint(String subject, String note, String sender) {
-        // send email
-        return "";
-    }
 }
