@@ -4,33 +4,22 @@
  */
 package Model.Bank;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author friedahuang
  */
 //try git
 public class Bank {
-    
-     private String accountNumber;  
-    private String name;  
-    private String accountType;  
-    private long balance;  
+    ArrayList<Account> accounts;
 
-    public Bank(String accountNumber, String name, String accountType, long balance) {
-        this.accountNumber = accountNumber;
-        this.name = name;
-        this.accountType = accountType;
-        this.balance = balance;
+    public Bank(ArrayList<Account> accounts) {
+        this.accounts = accounts;
     }
     
-    public void deposit() {
-        
+    public void transaction(Account from, Account to, long amount) {
+        from.setBalance(from.getBalance() - amount);
+        to.setBalance(to.getBalance() + amount);
     }
-    
-    public void withdrawal() {
-        
-    }
-    
-
-    
 }

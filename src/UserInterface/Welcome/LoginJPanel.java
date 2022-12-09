@@ -6,6 +6,8 @@ package UserInterface.Welcome;
 
 import Model.Event;
 import Model.Person;
+import Model.UserAccount;
+import Model.Volunteer.Volunteer;
 import UserInterface.Bank.GeneratePaymentRecord;
 import UserInterface.EventOrganizer.EventOrganizerMainPage;
 import UserInterface.Sponsor.SponsorMain;
@@ -185,8 +187,13 @@ public class LoginJPanel extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
     
     public void authentication(String email, String password, String role) {
-        try{ 
-            Boolean flag = false;
+        String dbId = null;
+        String dbName = null;
+        String dbPsw = null;
+        String dbRole = null;
+        Boolean flag = false;
+        
+        try{
             Class.forName("com.mysql.cj.jdbc.Driver");  
             Connection con=DriverManager.getConnection(  
             "jdbc:mysql://localhost:3306/final5100","root","root");   
@@ -194,16 +201,28 @@ public class LoginJPanel extends javax.swing.JPanel {
             ResultSet rs=stmt.executeQuery("select * from user_account WHERE email ='" + email + "';");  
             
             while(rs.next()) {
-                System.out.println(password+rs.getString("password")+"||"+ role + rs.getString("role"));
-                if(password.equals(rs.getString("password")) && role.equals(rs.getString("role"))){
+                dbId = rs.getString("user_id");
+                dbName = rs.getString("name");
+                dbPsw = rs.getString("password");
+                dbRole = rs.getString("role");
+                if(password.equals(dbPsw) && role.equals(dbRole)){
                     flag = true;
-                }
-                
+                }                
             }
+            rs.close();
+            con.close();  
+            }catch(Exception e){ System.out.println(e);}  
+        
+        
+        
             
+            UserAccount userAccount = new UserAccount(dbId, dbName, dbPsw, dbRole, email);
+            
+            System.out.println(userAccount.getPassword());
             if(flag == true) {
                 if(role == "volunteer") {
-                    VolunteerMain volunteerMain = new VolunteerMain(CardSequencePanel);
+                    Volunteer volunteer = new Volunteer(userAccount);
+                    VolunteerMain volunteerMain = new VolunteerMain(CardSequencePanel, volunteer);
                     CardSequencePanel.removeAll();
                     CardSequencePanel.add("volunteer", volunteerMain);
                     ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
@@ -230,9 +249,7 @@ public class LoginJPanel extends javax.swing.JPanel {
                 }
             }
 
-            rs.close();
-            con.close();  
-            }catch(Exception e){ System.out.println(e);}  
+            
         
     }
 
