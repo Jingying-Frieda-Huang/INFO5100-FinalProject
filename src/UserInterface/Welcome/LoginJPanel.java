@@ -68,7 +68,7 @@ public class LoginJPanel extends javax.swing.JPanel {
         jLabel4.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
         jLabel4.setText("Role");
 
-        cbRole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "event organizer", "catering service provider", "venue service provider", "attendee", "Sponsor", "ticket manager", "volunteer", "bank" }));
+        cbRole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "event organizer", "catering service provider", "Venue Service Provider", "Attendee", "Sponsor", "ticket manager", "volunteer", "bank" }));
 
         jButton1.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
         jButton1.setText("Login");
@@ -133,7 +133,7 @@ public class LoginJPanel extends javax.swing.JPanel {
         String email = tfEmail.getText();
         String psw = tfPassword.getText();
         String role = String.valueOf(cbRole.getSelectedItem());
-        authentication(email, psw, role);
+//        authentication(email, psw, role);
         
         
         //if you don't want to use userAccount, just write your page and it will works
@@ -150,10 +150,10 @@ public class LoginJPanel extends javax.swing.JPanel {
 //        CardSequencePanel.add("eventOrganizer", eventOrganizerMainPage);
 //        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
 
-//        SponsorMain sponsorMain = new SponsorMain(CardSequencePanel);
-//        CardSequencePanel.removeAll();
-//        CardSequencePanel.add("Sponsor", sponsorMain);
-//        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+        SponsorMain sponsorMain = new SponsorMain(CardSequencePanel);
+        CardSequencePanel.removeAll();
+        CardSequencePanel.add("Sponsor", sponsorMain);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
 
 //          TicketGenerate ticketGenerate = new TicketGenerate(CardSequencePanel);
 //          CardSequencePanel.removeAll();
@@ -235,6 +235,16 @@ public class LoginJPanel extends javax.swing.JPanel {
                     GeneratePaymentRecord generatePaymentRecord = new GeneratePaymentRecord(CardSequencePanel);
                     CardSequencePanel.removeAll();
                     CardSequencePanel.add("bank generate payment record", generatePaymentRecord);
+                    ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+                } else if(role == "Sponsor"){
+                    SponsorMain sponsorMain = new SponsorMain(CardSequencePanel);
+                    CardSequencePanel.removeAll();
+                    CardSequencePanel.add("Sponsor", sponsorMain); 
+                    ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+                } else if(role == "Venue Service Provider"){
+                    VenueOwnerMain venueOwnerMain = new VenueOwnerMain(CardSequencePanel);
+                    CardSequencePanel.removeAll();
+                    CardSequencePanel.add("Venue Owner", venueOwnerMain);                    
                     ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
                 }
             }
