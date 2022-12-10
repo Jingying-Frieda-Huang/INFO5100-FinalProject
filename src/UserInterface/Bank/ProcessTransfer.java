@@ -5,6 +5,7 @@
 package UserInterface.Bank;
 
 import Model.Bank.Transfer;
+import Model.Database;
 import Model.TicketManager.PaymentRecord;
 import static java.lang.Integer.max;
 import static java.lang.Integer.min;
@@ -35,10 +36,12 @@ public class ProcessTransfer extends javax.swing.JPanel {
     TableRowSorter myTableRowSorter;
     Transfer selectedTransfer;
     ArrayList<Transfer> transfers;
+    Database database;
     
     public ProcessTransfer(JPanel clp) {
         this.CardSequencePanel = clp;
         transfers= new ArrayList<>();
+        database = new Database();
         
         initComponents();
         
@@ -66,17 +69,17 @@ public class ProcessTransfer extends javax.swing.JPanel {
 
         tblTransfer.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "id", "sender", "receiver", "type", "amount", "state"
+                "id", "sender", "receiver", "type", "amount", "state", "event"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, true
+                false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -140,24 +143,26 @@ public class ProcessTransfer extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGeneratePaymentRecordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGeneratePaymentRecordActionPerformed
-        PaymentRecord record = new PaymentRecord();
-        record.setId(selectedTransfer.getId()+(int)(Math.random()*100+1));
-//        record.setCustomer(selectedTransfer.getCustomerId());
-//        record.setEvent(selectedTransfer.getEventId());
-        
-        try{  
-            Class.forName("com.mysql.cj.jdbc.Driver");  
-            Connection con=DriverManager.getConnection(  
-            "jdbc:mysql://localhost:3306/final5100","root","root");  
-            //here sonoo is database name, root is username and password  
-            String query = " insert into record (record_id, event_id, customer_id)"
-        + " values ("+record.getId()+","+ record.getEvent()+ "," + record.getCustomer()+")";  
-            PreparedStatement preparedStmt = con.prepareStatement(query);  
-            
-            preparedStmt.execute();
-            con.close();  
-            }catch(Exception e){ System.out.println(e);}  
+
+        if(selectedTransfer.getType().equals("payment")){
+            PaymentRecord record = new PaymentRecord();
+            record.setId(selectedTransfer.getId()+(int)(Math.random()*100+1));
+            record.setCustomer(selectedTransfer.getReceiver());
+            record.setEvent(selectedTransfer.getEvent());
+            record.setState("pending");
+
+            generateRecord(record);
             JOptionPane.showMessageDialog(this, "Transfer record generated successfully");
+        } 
+        
+        
+        
+        changeTransferState();
+        
+        
+        
+        
+        
     }//GEN-LAST:event_btnGeneratePaymentRecordActionPerformed
 
     private void tblTransferMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblTransferMouseClicked
@@ -190,13 +195,14 @@ public class ProcessTransfer extends javax.swing.JPanel {
         model = (DefaultTableModel) tblTransfer.getModel();
         model.setRowCount(0);
         for(Transfer p: transfers) {
-            Object[] row = new Object[6];
+            Object[] row = new Object[7];
             row[0] = p;
             row[1] = p.getSender();
             row[2] = p.getReceiver();
             row[3] = p.getType();
             row[4] = p.getAmount();
             row[5] = p.getState();
+            row[6] = p.getEvent();
             model.addRow(row);
         }
     }
@@ -227,6 +233,7 @@ public class ProcessTransfer extends javax.swing.JPanel {
                 transfer.setAmount(rs.getInt("amount"));
                 transfer.setState(rs.getString("state"));
                 transfer.setType(rs.getString("type"));
+                transfer.setEvent(rs.getString("event"));
                 
                 
                 
@@ -237,5 +244,19 @@ public class ProcessTransfer extends javax.swing.JPanel {
             rs.close();
             con.close();  
             }catch(Exception e){ System.out.println(e);}  
+    }
+    
+    
+    public void generateRecord(PaymentRecord record){
+        String query = " insert into record (record_id, event_id, customer_id)"
+        + " values ("+record.getId()+","+ record.getEvent()+ "," + record.getCustomer()+")";  
+        System.out.print(query);
+        database.insert(query);
+    }
+    
+    public void changeTransferState(){
+        selectedTransfer.setState("completed");
+        String sql = "UPDATE transfer " + "SET state = '" + "completed" + "' WHERE id = '" + selectedTransfer.getId()+ "';";
+        database.update(sql);
     }
 }

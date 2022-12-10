@@ -15,12 +15,12 @@ import java.util.Date;
  */
 public class Event {
 
-    String name;
+    
     String description;
-    String location;
+
     double duration;
     EventOrganizer evtOrganizer;
-    Date date;
+    
     int totalTickets;
     ArrayList<Ticket> tickets;
     ArrayList<EndUser> attendees;
@@ -126,8 +126,7 @@ public class Event {
     ////////////////////////////////////////////////////////////////////////////////////
     //this create because volunteer page need volunteer capacity
     public Event(){}
-    String volunteerCapacity;
-    int event_id;
+    
     public Event(int evnet_id, String name, Date date, String location, String volunteerCapacity) {
         this.event_id = event_id;
         this.name = name;
@@ -159,6 +158,76 @@ public class Event {
     public void setEvent_id(int event_id) {
         this.event_id = event_id;
     }
+    
+    
+    
+    int event_id;
+    String name;
+    String eventOrganizer;
+    Date date;
+    String location;
+    String sponsor;
+    String customerCapacity;
+    String volunteerCapacity;
+    int ticketPrice;
+    String state;
+
+    public Event(int event_id, String name, String eventOrganizer, Date date, String location, String sponsor, String customerCapacity, String volunteerCapacity, int ticketPrice, String state) {
+        this.event_id = event_id;
+        this.name = name;
+        this.eventOrganizer = eventOrganizer;
+        this.date = date;
+        this.location = location;
+        this.sponsor = sponsor;
+        this.customerCapacity = customerCapacity;
+        this.volunteerCapacity = volunteerCapacity;
+        this.ticketPrice = ticketPrice;
+        this.state = state;
+    }
+
+    public String getEventOrganizer() {
+        return eventOrganizer;
+    }
+
+    public void setEventOrganizer(String eventOrganizer) {
+        this.eventOrganizer = eventOrganizer;
+    }
+
+
+    public String getSponsor() {
+        return sponsor;
+    }
+
+    public void setSponsor(String sponsor) {
+        this.sponsor = sponsor;
+    }
+
+    public String getCustomerCapacity() {
+        return customerCapacity;
+    }
+
+    public void setCustomerCapacity(String customerCapacity) {
+        this.customerCapacity = customerCapacity;
+    }
+
+    public int getTicketPrice() {
+        return ticketPrice;
+    }
+
+    public void setTicketPrice(int ticketPrice) {
+        this.ticketPrice = ticketPrice;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+   
+    
+    
     
     
     

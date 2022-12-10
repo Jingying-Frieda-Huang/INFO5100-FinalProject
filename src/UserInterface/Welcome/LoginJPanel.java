@@ -4,12 +4,14 @@
  */
 package UserInterface.Welcome;
 
+import Model.Customer.Customer;
 import Model.Event;
 import Model.Person;
 import Model.Sponsor;
 import Model.UserAccount;
 import Model.Volunteer.Volunteer;
 import UserInterface.Bank.ProcessTransfer;
+import UserInterface.Customer.CustomerMain;
 import UserInterface.EventOrganizer.EventOrganizerMainPage;
 import UserInterface.Sponsor.SponsorMain;
 import UserInterface.TicketManager.TicketGenerate;
@@ -69,7 +71,7 @@ public class LoginJPanel extends javax.swing.JPanel {
         jLabel4.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
         jLabel4.setText("Role");
 
-        cbRole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "event organizer", "catering service provider", "Venue Service Provider", "Attendee", "Sponsor", "ticket manager", "volunteer", "bank" }));
+        cbRole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "customer", "event organizer", "catering service provider", "Venue Service Provider", "Attendee", "Sponsor", "ticket manager", "volunteer", "bank" }));
 
         jButton1.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
         jButton1.setText("Login");
@@ -245,6 +247,12 @@ public class LoginJPanel extends javax.swing.JPanel {
                     VenueOwnerMain venueOwnerMain = new VenueOwnerMain(CardSequencePanel);
                     CardSequencePanel.removeAll();
                     CardSequencePanel.add("Venue Owner", venueOwnerMain);                    
+                    ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+                } else if(role == "customer"){
+                    Customer customer = new Customer(userAccount);
+                    CustomerMain customerMain = new CustomerMain(CardSequencePanel, customer);
+                    CardSequencePanel.removeAll();
+                    CardSequencePanel.add("Customer", customerMain);                    
                     ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
                 }
             }
