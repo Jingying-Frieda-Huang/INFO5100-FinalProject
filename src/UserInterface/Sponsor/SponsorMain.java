@@ -4,6 +4,7 @@
  */
 package UserInterface.Sponsor;
 
+import Model.Sponsor;
 import javax.swing.JPanel;
 
 /**
@@ -15,10 +16,15 @@ public class SponsorMain extends javax.swing.JPanel {
     /**
      * Creates new form SponsorMain
      */
+    Sponsor sp;
+    
     javax.swing.JPanel CardSequencePanel;
-    public SponsorMain(JPanel clp) {
+    public SponsorMain(JPanel clp, Sponsor sponsor) {
         this.CardSequencePanel = clp;
+        this.sp = sponsor;
         initComponents();
+        
+        populateMain();
     }
 
     /**
@@ -36,7 +42,7 @@ public class SponsorMain extends javax.swing.JPanel {
         lblbztype = new javax.swing.JLabel();
         lblbzdate = new javax.swing.JLabel();
         txtbztype = new javax.swing.JTextField();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        dtDate = new com.toedter.calendar.JDateChooser();
 
         jLabel1.setText("Welcome, Sponsor");
 
@@ -53,6 +59,10 @@ public class SponsorMain extends javax.swing.JPanel {
         lblbztype.setText("Business Type:");
 
         lblbzdate.setText("Date Established:");
+
+        txtbztype.setEditable(false);
+
+        dtDate.setEnabled(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -76,7 +86,7 @@ public class SponsorMain extends javax.swing.JPanel {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtbztype)
-                            .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE))))
+                            .addComponent(dtDate, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE))))
                 .addContainerGap(173, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -84,7 +94,7 @@ public class SponsorMain extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dtDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(31, 31, 31)
@@ -102,20 +112,28 @@ public class SponsorMain extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnbzcheckrequestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbzcheckrequestActionPerformed
-        SponsorRequestList sponsorRequestList = new SponsorRequestList(CardSequencePanel);
+        SponsorRequestList sponsorRequestList = new SponsorRequestList(CardSequencePanel, sp);
         CardSequencePanel.removeAll();
         CardSequencePanel.add("Request list", sponsorRequestList);
         ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+        
+        
     }//GEN-LAST:event_btnbzcheckrequestActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnbzcheckrequest;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
+    private com.toedter.calendar.JDateChooser dtDate;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblbzdate;
     private javax.swing.JLabel lblbztype;
     private javax.swing.JLabel lblsponsorname;
     private javax.swing.JTextField txtbztype;
     // End of variables declaration//GEN-END:variables
+
+    private void populateMain() {
+        txtbztype.setText(sp.getBusiness_type());
+        dtDate.setDate(sp.getEst_date());
+        lblsponsorname.setText(sp.getName());
+    }
 }
