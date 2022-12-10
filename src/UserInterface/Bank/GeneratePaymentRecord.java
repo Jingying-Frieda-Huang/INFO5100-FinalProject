@@ -4,7 +4,7 @@
  */
 package UserInterface.Bank;
 
-import Model.Bank.Payment;
+import Model.Bank.Transfer;
 import Model.TicketManager.PaymentRecord;
 import static java.lang.Integer.max;
 import static java.lang.Integer.min;
@@ -33,8 +33,8 @@ public class GeneratePaymentRecord extends javax.swing.JPanel {
     
     DefaultTableModel model;
     TableRowSorter myTableRowSorter;
-    Payment selectedPayment;
-    ArrayList<Payment> payments;
+    Transfer selectedPayment;
+    ArrayList<Transfer> payments;
     
     public GeneratePaymentRecord(JPanel clp) {
         this.CardSequencePanel = clp;
@@ -42,8 +42,8 @@ public class GeneratePaymentRecord extends javax.swing.JPanel {
         
         initComponents();
         
-        dbGetPayment();
-        populatePaymentTable();
+//        dbGetPayment();
+//        populatePaymentTable();
         sort(model);
         
         
@@ -142,8 +142,8 @@ public class GeneratePaymentRecord extends javax.swing.JPanel {
     private void btnGeneratePaymentRecordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGeneratePaymentRecordActionPerformed
         PaymentRecord record = new PaymentRecord();
         record.setId(selectedPayment.getId()+(int)(Math.random()*100+1));
-        record.setCustomer(selectedPayment.getCustomerId());
-        record.setEvent(selectedPayment.getEventId());
+//        record.setCustomer(selectedPayment.getCustomerId());
+//        record.setEvent(selectedPayment.getEventId());
         
         try{  
             Class.forName("com.mysql.cj.jdbc.Driver");  
@@ -163,7 +163,7 @@ public class GeneratePaymentRecord extends javax.swing.JPanel {
     private void tblPaymentMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPaymentMouseClicked
         int selectedRowIndex = tblPayment.getSelectedRow();
         DefaultTableModel model = (DefaultTableModel) tblPayment.getModel();
-        selectedPayment = (Payment)model.getValueAt(tblPayment.convertRowIndexToModel(selectedRowIndex), 0); 
+        selectedPayment = (Transfer)model.getValueAt(tblPayment.convertRowIndexToModel(selectedRowIndex), 0); 
         
     }//GEN-LAST:event_tblPaymentMouseClicked
 
@@ -187,17 +187,17 @@ public class GeneratePaymentRecord extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
 
     public void populatePaymentTable() {
-        model = (DefaultTableModel) tblPayment.getModel();
-        model.setRowCount(0);
-        for(Payment p: payments) {
-            Object[] row = new Object[5];
-            row[0] = p;
-            row[1] = p.getAccountNumber();
-            row[2] = p.getName();
-            row[3] = p.getCustomerId();
-            row[4] = p.getMoney();
-            model.addRow(row);
-        }
+//        model = (DefaultTableModel) tblPayment.getModel();
+//        model.setRowCount(0);
+//        for(Transfer p: payments) {
+//            Object[] row = new Object[5];
+//            row[0] = p;
+//            row[1] = p.getAccountNumber();
+//            row[2] = p.getName();
+//            row[3] = p.getCustomerId();
+//            row[4] = p.getMoney();
+//            model.addRow(row);
+//        }
     }
     
     public void sort(DefaultTableModel model) {
@@ -207,31 +207,31 @@ public class GeneratePaymentRecord extends javax.swing.JPanel {
     }
     
     
-    public void dbGetPayment(){
-        try{  
-            Class.forName("com.mysql.cj.jdbc.Driver");  
-            Connection con=DriverManager.getConnection(  
-            "jdbc:mysql://localhost:3306/final5100","root","root");  
-            //here sonoo is database name, root is username and password  
-            Statement stmt=con.createStatement();  
-            ResultSet rs=stmt.executeQuery("select * from payment");  
-             
-            while(rs.next()) {
-                Payment payment = new Payment();
-                payment.setId(rs.getString("payment_id"));
-                payment.setAccountNumber(rs.getString("account_number"));
-                payment.setName(rs.getString("name"));
-                payment.setCustomerId(rs.getString("customer_id"));
-                payment.setEventId(rs.getString("event_id"));
-                payment.setMoney(Integer.valueOf(rs.getString("money")));
-                
-                
-                System.out.println(payment.getId());
-                payments.add(payment);
-            }
-
-            rs.close();
-            con.close();  
-            }catch(Exception e){ System.out.println(e);}  
-    }
+//    public void dbGetPayment(){
+//        try{  
+//            Class.forName("com.mysql.cj.jdbc.Driver");  
+//            Connection con=DriverManager.getConnection(  
+//            "jdbc:mysql://localhost:3306/final5100","root","root");  
+//            //here sonoo is database name, root is username and password  
+//            Statement stmt=con.createStatement();  
+//            ResultSet rs=stmt.executeQuery("select * from payment");  
+//             
+//            while(rs.next()) {
+//                Transfer payment = new Transfer();
+//                payment.setId(rs.getString("payment_id"));
+//                payment.setAccountNumber(rs.getString("account_number"));
+//                payment.setName(rs.getString("name"));
+//                payment.setCustomerId(rs.getString("customer_id"));
+//                payment.setEventId(rs.getString("event_id"));
+//                payment.setMoney(Integer.valueOf(rs.getString("money")));
+//                
+//                
+//                System.out.println(payment.getId());
+//                payments.add(payment);
+//            }
+//
+//            rs.close();
+//            con.close();  
+//            }catch(Exception e){ System.out.println(e);}  
+//    }
 }

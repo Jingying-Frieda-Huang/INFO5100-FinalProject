@@ -4,6 +4,7 @@
  */
 package UserInterface.TicketManager;
 
+import Model.Database;
 import Model.Event;
 import Model.TicketManager.PaymentRecord;
 import Model.TicketManager.Ticket;
@@ -151,29 +152,38 @@ public class TicketGenerate extends javax.swing.JPanel {
         ticket.setEventId(selectedRecord.getEvent());
         selectedRecord.setState("completed");
         
-        try{  
-            Class.forName("com.mysql.cj.jdbc.Driver");  
-            Connection con=DriverManager.getConnection(  
-            "jdbc:mysql://localhost:3306/final5100","root","root");  
-            //here sonoo is database name, root is username and password  
-            String query = " insert into ticket (ticket_id, customer_id, event_id)"
+        Database database = new Database();
+        
+        String insertsql = " insert into ticket (ticket_id, customer_id, event_id)"
             + " values ("+ticket.getId()+","+ ticket.getCustomerId()+ "," + ticket.getEventId()+")";  
-            PreparedStatement preparedStmt = con.prepareStatement(query);             
-            preparedStmt.execute();
-            con.close();  
-            }catch(Exception e){ System.out.println(e);}
+        database.insert(insertsql);
+//        try{  
+//            Class.forName("com.mysql.cj.jdbc.Driver");  
+//            Connection con=DriverManager.getConnection(  
+//            "jdbc:mysql://localhost:3306/ems_5100","root","root");  
+//            //here sonoo is database name, root is username and password  
+//            String query = " insert into ticket (ticket_id, customer_id, event_id)"
+//            + " values ("+ticket.getId()+","+ ticket.getCustomerId()+ "," + ticket.getEventId()+")";  
+//            PreparedStatement preparedStmt = con.prepareStatement(query);             
+//            preparedStmt.execute();
+//            con.close();  
+//            }catch(Exception e){ System.out.println(e);}
+        
+        
+        String updatesql = "UPDATE record " + "SET state = '" + "completed" + "' WHERE record_id = '" + selectedRecord.getId()+ "';";
+        database.update(updatesql);
             
-        try{  
-            Class.forName("com.mysql.cj.jdbc.Driver");  
-            Connection con=DriverManager.getConnection(  
-            "jdbc:mysql://localhost:3306/final5100","root","root");  
-            Statement stmt=con.createStatement();             
-            String sql = "UPDATE record " + "SET state = '" + "completed" + "' WHERE record_id = '" + selectedRecord.getId()+ "';";
-            System.out.print(sql);
-            stmt.executeUpdate(sql);
-            con.close();  
-            }catch(Exception e){ System.out.println(e);}  
-            
+//        try{  
+//            Class.forName("com.mysql.cj.jdbc.Driver");  
+//            Connection con=DriverManager.getConnection(  
+//            "jdbc:mysql://localhost:3306/ems_5100","root","root");  
+//            Statement stmt=con.createStatement();             
+//            String sql = "UPDATE record " + "SET state = '" + "completed" + "' WHERE record_id = '" + selectedRecord.getId()+ "';";
+//            System.out.print(sql);
+//            stmt.executeUpdate(sql);
+//            con.close();  
+//            }catch(Exception e){ System.out.println(e);}  
+//            
             populatePaymentRecordTable();
             JOptionPane.showMessageDialog(this, "Ticket generated successfully");
     }//GEN-LAST:event_btnGenerateTicketActionPerformed
@@ -221,13 +231,12 @@ public class TicketGenerate extends javax.swing.JPanel {
         try{  
             Class.forName("com.mysql.cj.jdbc.Driver");  
             Connection con=DriverManager.getConnection(  
-            "jdbc:mysql://localhost:3306/final5100","root","root");  
+            "jdbc:mysql://localhost:3306/ems_5100","root","root");  
             //here sonoo is database name, root is username and password  
             Statement stmt=con.createStatement();  
             ResultSet rs=stmt.executeQuery("select * from record");  
             
-//            while(rs.next())  
-//            System.out.println(rs.getInt(1)+"  "+rs.getString(2)+"  "+rs.getString(3));  
+
             while(rs.next()) {
                 PaymentRecord paymentRecord = new PaymentRecord();
                 paymentRecord.setId(rs.getString("record_id"));

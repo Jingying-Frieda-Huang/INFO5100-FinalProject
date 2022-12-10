@@ -133,7 +133,7 @@ public class LoginJPanel extends javax.swing.JPanel {
         String email = tfEmail.getText();
         String psw = tfPassword.getText();
         String role = String.valueOf(cbRole.getSelectedItem());
-//        authentication(email, psw, role);
+        authentication(email, psw, role);
         
         
         //if you don't want to use userAccount, just write your page and it will works
@@ -150,10 +150,10 @@ public class LoginJPanel extends javax.swing.JPanel {
 //        CardSequencePanel.add("eventOrganizer", eventOrganizerMainPage);
 //        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
 
-        SponsorMain sponsorMain = new SponsorMain(CardSequencePanel);
-        CardSequencePanel.removeAll();
-        CardSequencePanel.add("Sponsor", sponsorMain);
-        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+//        SponsorMain sponsorMain = new SponsorMain(CardSequencePanel);
+//        CardSequencePanel.removeAll();
+//        CardSequencePanel.add("Sponsor", sponsorMain);
+//        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
 
 //          TicketGenerate ticketGenerate = new TicketGenerate(CardSequencePanel);
 //          CardSequencePanel.removeAll();
