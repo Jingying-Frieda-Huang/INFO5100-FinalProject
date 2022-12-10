@@ -10,7 +10,7 @@ package Model.Bank;
  */
 public class Transfer {
     String id;
-    String sneder;  
+    String sender;  
     String receiver;
     String type;
     int amount;
@@ -18,9 +18,9 @@ public class Transfer {
      
     public Transfer(){}
 
-    public Transfer(String id, String sneder, String receiver, String type, int amount, String state) {
+    public Transfer(String id, String sender, String receiver, String type, int amount, String state) {
         this.id = id;
-        this.sneder = sneder;
+        this.sender = sender;
         this.receiver = receiver;
         this.type = type;
         this.amount = amount;
@@ -35,12 +35,12 @@ public class Transfer {
         this.id = id;
     }
 
-    public String getSneder() {
-        return sneder;
+    public String getSender() {
+        return sender;
     }
 
-    public void setSneder(String sneder) {
-        this.sneder = sneder;
+    public void setSender(String sender) {
+        this.sender = sender;
     }
 
     public String getReceiver() {

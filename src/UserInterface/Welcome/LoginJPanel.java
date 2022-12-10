@@ -8,7 +8,7 @@ import Model.Event;
 import Model.Person;
 import Model.UserAccount;
 import Model.Volunteer.Volunteer;
-import UserInterface.Bank.GeneratePaymentRecord;
+import UserInterface.Bank.ProcessTransfer;
 import UserInterface.EventOrganizer.EventOrganizerMainPage;
 import UserInterface.Sponsor.SponsorMain;
 import UserInterface.TicketManager.TicketGenerate;
@@ -166,9 +166,9 @@ public class LoginJPanel extends javax.swing.JPanel {
 //            CardSequencePanel.add("volunteer", volunteerMain);
 //            ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
 
-//        GeneratePaymentRecord generatePaymentRecord = new GeneratePaymentRecord(CardSequencePanel);
+//        ProcessTransfer ProcessTransfer = new ProcessTransfer(CardSequencePanel);
 //        CardSequencePanel.removeAll();
-//        CardSequencePanel.add("bank generate payment record", generatePaymentRecord);
+//        CardSequencePanel.add("bank generate payment record", ProcessTransfer);
 //        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
             
           
@@ -232,9 +232,9 @@ public class LoginJPanel extends javax.swing.JPanel {
                     CardSequencePanel.add("ticketManager", ticketGenerate);
                     ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
                 } else if(role == "bank") {
-                    GeneratePaymentRecord generatePaymentRecord = new GeneratePaymentRecord(CardSequencePanel);
+                    ProcessTransfer ProcessTransfer = new ProcessTransfer(CardSequencePanel);
                     CardSequencePanel.removeAll();
-                    CardSequencePanel.add("bank generate payment record", generatePaymentRecord);
+                    CardSequencePanel.add("bank generate payment record", ProcessTransfer);
                     ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
                 } else if(role == "Sponsor"){
                     SponsorMain sponsorMain = new SponsorMain(CardSequencePanel);
