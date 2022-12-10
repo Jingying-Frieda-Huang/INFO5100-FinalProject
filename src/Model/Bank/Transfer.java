@@ -15,16 +15,20 @@ public class Transfer {
     String type;
     int amount;
     String state;
+    String event;
+
+
      
     public Transfer(){}
 
-    public Transfer(String id, String sender, String receiver, String type, int amount, String state) {
+    public Transfer(String id, String sender, String receiver, String type, int amount, String state, String event) {
         this.id = id;
         this.sender = sender;
         this.receiver = receiver;
         this.type = type;
         this.amount = amount;
         this.state = state;
+        this.event = event;
     }
 
     public String getId() {
@@ -73,6 +77,14 @@ public class Transfer {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public String getEvent() {
+        return event;
+    }
+
+    public void setEvent(String event) {
+        this.event = event;
     }
 
 
