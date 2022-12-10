@@ -132,8 +132,8 @@ public class SponsorMain extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
 
     private void populateMain() {
-        txtbztype.setText(sp.getBusiness_type());
-        dtDate.setDate(sp.getEst_date());
+//        txtbztype.setText(sp.getBusiness_type());
+//        dtDate.setDate(sp.getEst_date());
         lblsponsorname.setText(sp.getName());
     }
 }
