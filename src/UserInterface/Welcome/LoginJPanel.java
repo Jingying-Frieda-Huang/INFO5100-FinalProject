@@ -205,7 +205,7 @@ public class LoginJPanel extends javax.swing.JPanel {
                 dbId = rs.getString("user_id");
                 dbName = rs.getString("name");
                 dbPsw = rs.getString("password");
-                dbRole = rs.getString("user_role");
+                dbRole = rs.getString("role");
                 if(password.equals(dbPsw) && role.equals(dbRole)){
                     flag = true;
                 }                
