@@ -14,11 +14,20 @@ package Model;
 */
 public class SponsorRequest {
     Sponsor sp;
-    EventOrganizer eventOrg;
     Event event;
     private int requestId;
     private String status;
     private int amount;
+    private int eventId;
+    private int sponsorId;
+
+    public void setEventId(int eventId) {
+        this.eventId = eventId;
+    }
+
+    public void setSponsorId(int sponsorId) {
+        this.sponsorId = sponsorId;
+    }
 
     public SponsorRequest() { 
     }
@@ -29,14 +38,6 @@ public class SponsorRequest {
 
     public void setSp(Sponsor sp) {
         this.sp = sp;
-    }
-
-    public EventOrganizer getEventOrg() {
-        return eventOrg;
-    }
-
-    public void setEventOrg(EventOrganizer eventOrg) {
-        this.eventOrg = eventOrg;
     }
 
     public Event getEvent() {
@@ -71,5 +72,21 @@ public class SponsorRequest {
         this.amount = amount;
     }
     
+    public int getEventId(){
+        return eventId;
+    }
+    
+    public int getSponsorId(){
+        return sponsorId;
+    }
+    
+    public String getEventName(){
+        return event.getName();
+    }
+
+    @Override
+    public String toString() {
+        return  Integer.toString(eventId);
+    }
     
 }

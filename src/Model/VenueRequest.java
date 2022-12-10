@@ -18,6 +18,8 @@ public class VenueRequest {
     Venue venue;
     private String status;
     Date requestDate;
+    private int eventId;
+    private int venueId;
 
     public VenueRequest() {
     }
@@ -60,6 +62,27 @@ public class VenueRequest {
 
     public void setRequestDate(Date requestDate) {
         this.requestDate = requestDate;
+    }
+
+    public int getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(int eventId) {
+        this.eventId = eventId;
+    }
+
+    public int getVenueId() {
+        return venueId;
+    }
+
+    public void setVenueId(int venueId) {
+        this.venueId = venueId;
+    }
+
+    @Override
+    public String toString() {
+        return Integer.toString(eventId);
     }
 
     

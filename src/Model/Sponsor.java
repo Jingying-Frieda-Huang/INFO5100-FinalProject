@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Model;
+import java.util.Date;
 
 /**
  *
@@ -13,8 +14,13 @@ public class Sponsor {
     private String name;
     private String business_type;
     private Date est_date;
+    UserAccount user;
 
     public Sponsor() {
+    }
+
+    public Sponsor(UserAccount user) {
+        this.user = user;
     }
 
     public Date getEst_date() {

@@ -6,6 +6,7 @@ package UserInterface.Welcome;
 
 import Model.Event;
 import Model.Person;
+import Model.Sponsor;
 import Model.UserAccount;
 import Model.Volunteer.Volunteer;
 import UserInterface.Bank.GeneratePaymentRecord;
@@ -133,7 +134,7 @@ public class LoginJPanel extends javax.swing.JPanel {
         String email = tfEmail.getText();
         String psw = tfPassword.getText();
         String role = String.valueOf(cbRole.getSelectedItem());
-//        authentication(email, psw, role);
+        authentication(email, psw, role);
         
         
         //if you don't want to use userAccount, just write your page and it will works
@@ -150,10 +151,10 @@ public class LoginJPanel extends javax.swing.JPanel {
 //        CardSequencePanel.add("eventOrganizer", eventOrganizerMainPage);
 //        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
 
-        SponsorMain sponsorMain = new SponsorMain(CardSequencePanel);
-        CardSequencePanel.removeAll();
-        CardSequencePanel.add("Sponsor", sponsorMain);
-        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+//        SponsorMain sponsorMain = new SponsorMain(CardSequencePanel);
+//        CardSequencePanel.removeAll();
+//        CardSequencePanel.add("Sponsor", sponsorMain);
+//        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
 
 //          TicketGenerate ticketGenerate = new TicketGenerate(CardSequencePanel);
 //          CardSequencePanel.removeAll();
@@ -196,7 +197,7 @@ public class LoginJPanel extends javax.swing.JPanel {
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");  
             Connection con=DriverManager.getConnection(  
-            "jdbc:mysql://localhost:3306/final5100","root","root");   
+            "jdbc:mysql://localhost:3306/ems_5100","root","root");   
             Statement stmt=con.createStatement();  
             ResultSet rs=stmt.executeQuery("select * from user_account WHERE email ='" + email + "';");  
             
@@ -204,7 +205,7 @@ public class LoginJPanel extends javax.swing.JPanel {
                 dbId = rs.getString("user_id");
                 dbName = rs.getString("name");
                 dbPsw = rs.getString("password");
-                dbRole = rs.getString("role");
+                dbRole = rs.getString("user_role");
                 if(password.equals(dbPsw) && role.equals(dbRole)){
                     flag = true;
                 }                
@@ -214,8 +215,6 @@ public class LoginJPanel extends javax.swing.JPanel {
             }catch(Exception e){ System.out.println(e);}  
         
         
-        
-            
             UserAccount userAccount = new UserAccount(dbId, dbName, dbPsw, dbRole, email);
             
             System.out.println(userAccount.getPassword());
@@ -237,7 +236,8 @@ public class LoginJPanel extends javax.swing.JPanel {
                     CardSequencePanel.add("bank generate payment record", generatePaymentRecord);
                     ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
                 } else if(role == "Sponsor"){
-                    SponsorMain sponsorMain = new SponsorMain(CardSequencePanel);
+                    Sponsor sponsor = new Sponsor(userAccount);
+                    SponsorMain sponsorMain = new SponsorMain(CardSequencePanel, sponsor);
                     CardSequencePanel.removeAll();
                     CardSequencePanel.add("Sponsor", sponsorMain); 
                     ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);

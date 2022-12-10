@@ -4,7 +4,17 @@
  */
 package UserInterface.Sponsor;
 
+import Model.Event;
+import Model.Sponsor;
+import Model.SponsorRequest;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
 import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -15,9 +25,21 @@ public class SponsorRequestList extends javax.swing.JPanel {
     /**
      * Creates new form SponsorRequestList
      */
+    
+    DefaultTableModel model;
+    TableRowSorter myTableRowSorter;
+    ArrayList<SponsorRequest> reqList;
+    Sponsor sp;
+    
+    
     javax.swing.JPanel CardSequencePanel;
-    public SponsorRequestList(JPanel clp) {
+    public SponsorRequestList(JPanel clp, Sponsor sponsor) {
         this.CardSequencePanel = clp;
+        this.sp = sponsor;
+        
+        reqList = new ArrayList<>();
+        getAllRequests();
+        populateRequestTable();
         initComponents();
     }
 
@@ -32,13 +54,15 @@ public class SponsorRequestList extends javax.swing.JPanel {
 
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblRequest = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        btnAccept = new javax.swing.JButton();
+        btnDeny = new javax.swing.JButton();
 
         jLabel1.setText("Welcome, Sponsor");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblRequest.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -46,7 +70,7 @@ public class SponsorRequestList extends javax.swing.JPanel {
                 {null, null, null}
             },
             new String [] {
-                "Event", "Organizer", "Donation request"
+                "Event", "Donation request", "Status"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -57,7 +81,7 @@ public class SponsorRequestList extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblRequest);
 
         jButton1.setText("View Organiser History");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -73,6 +97,20 @@ public class SponsorRequestList extends javax.swing.JPanel {
             }
         });
 
+        btnAccept.setText("Accept Proposal");
+        btnAccept.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAcceptActionPerformed(evt);
+            }
+        });
+
+        btnDeny.setText("Deny Proposal");
+        btnDeny.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDenyActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -85,9 +123,14 @@ public class SponsorRequestList extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(34, 34, 34)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 557, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnAccept)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnDeny))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel1)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 557, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(175, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -99,9 +142,13 @@ public class SponsorRequestList extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
-                .addGap(54, 54, 54)
+                .addGap(43, 43, 43)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(105, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAccept)
+                    .addComponent(btnDeny))
+                .addContainerGap(75, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -117,15 +164,64 @@ public class SponsorRequestList extends javax.swing.JPanel {
         CardSequencePanel.removeAll();
         CardSequencePanel.add("Event Detail", sponsorEventDetails);
         ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
-
+        
+        
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void btnAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAcceptActionPerformed
+        
+    }//GEN-LAST:event_btnAcceptActionPerformed
+
+    private void btnDenyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDenyActionPerformed
+        
+    }//GEN-LAST:event_btnDenyActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAccept;
+    private javax.swing.JButton btnDeny;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tblRequest;
     // End of variables declaration//GEN-END:variables
+
+    private void getAllRequests() {
+        try{  
+            Class.forName("com.mysql.cj.jdbc.Driver");  
+            Connection con=DriverManager.getConnection(  
+            "jdbc:mysql://localhost:3306/ems_5100","root","root");   
+            Statement stmt=con.createStatement();  
+            ResultSet rs=stmt.executeQuery("select * from sponsor_request where sponsor_id = " + sp.getLic_no());  
+            
+            while(rs.next()) {
+                SponsorRequest spRequest = new SponsorRequest();
+                spRequest.setEventId(rs.getInt("event_id"));
+                spRequest.setSponsorId(rs.getInt("sponsor_id"));
+                spRequest.setAmount(rs.getInt("amount"));
+                spRequest.setStatus(rs.getString("Status"));
+                
+                reqList.add(spRequest);
+                
+            }
+
+            rs.close();
+            con.close();  
+        }catch(Exception e){ System.out.println(e);}
+    }
+
+    private void populateRequestTable() {
+        model = (DefaultTableModel) tblRequest.getModel();
+        model.setRowCount(0);
+        for(SponsorRequest s: reqList) {
+            Object[] row = new Object[3];
+            row[0] = s;
+            row[1] = s.getAmount();
+            row[2] = s.getStatus();
+            model.addRow(row);
+        }
+    }
+    
+    
 }
