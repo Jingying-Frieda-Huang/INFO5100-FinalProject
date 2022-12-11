@@ -6,6 +6,7 @@ package UserInterface.Welcome;
 
 import Model.Customer.Customer;
 import Model.Event;
+import Model.EventOrganizer;
 import Model.Person;
 import Model.Sponsor;
 import Model.UserAccount;
@@ -275,6 +276,12 @@ public class LoginJPanel extends javax.swing.JPanel {
                     CustomerMain customerMain = new CustomerMain(CardSequencePanel, customer);
                     CardSequencePanel.removeAll();
                     CardSequencePanel.add("Customer", customerMain);                    
+                    ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+                } else if(role == "event organizer") {
+                    EventOrganizer eventOrganizer = new EventOrganizer(userAccount);
+                    EventOrganizerPage eventOrganizerPage = new EventOrganizerPage(CardSequencePanel, eventOrganizer);
+                    CardSequencePanel.removeAll();
+                    CardSequencePanel.add("Event organizer", eventOrganizerPage);
                     ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
                 }
             }

@@ -7,13 +7,19 @@ package UserInterface.EventOrganizer;
 import Model.Customer.Customer;
 import Model.Database;
 import Model.Event;
+import Model.EventOrganizer;
+import Model.Sponsor;
 import Model.TicketManager.Ticket;
 import Model.Venue;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Formatter;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
@@ -29,26 +35,42 @@ public class EventOrganizerPage extends javax.swing.JPanel {
      */
     
     javax.swing.JPanel CardSequencePanel;
-    EventOrganizerPage eventOrganizer;
+    EventOrganizer eventOrganizer;
     
     DefaultTableModel modelVenue;
     TableRowSorter tableRowSorterVenue;
     Venue selectedVenue;
     ArrayList<Venue> venues;
+    
+    DefaultTableModel modelS;
+    TableRowSorter tableRowSorterS;
+    Sponsor selectedSponsor;
+    ArrayList<Sponsor> sponsors;
+    
+    Event newEvent;
+    
+    
     Database database;
     
-    public EventOrganizerPage(JPanel clp, EventOrganizerPage eventOrganizer) {
+    public EventOrganizerPage(JPanel clp, EventOrganizer eventOrganizer) {
         this.CardSequencePanel = clp;
         this.eventOrganizer = eventOrganizer;
         initComponents();
         
         database = new Database();
+        newEvent = new Event();
         
         venues = new ArrayList<>();
         dbGetVenue();
         populateVenueTable();
         tableRowSorterVenue = new TableRowSorter(modelVenue);
         tblVenue.setRowSorter(tableRowSorterVenue);
+        
+        sponsors = new ArrayList<>();
+        dbGetSponsor();
+        populateSponsorTable();
+        tableRowSorterS = new TableRowSorter(modelS);
+        tblSponsor.setRowSorter(tableRowSorterS);
        
         
     }
@@ -74,7 +96,7 @@ public class EventOrganizerPage extends javax.swing.JPanel {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         tfEventName = new javax.swing.JTextField();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        dateChooser = new com.toedter.calendar.JDateChooser();
         tfCustomerCapacity = new javax.swing.JTextField();
         tfPrice = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
@@ -84,6 +106,13 @@ public class EventOrganizerPage extends javax.swing.JPanel {
         jScrollPane2 = new javax.swing.JScrollPane();
         tblVenue = new javax.swing.JTable();
         btnRequestVenue = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        tfeventid = new javax.swing.JTextField();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tblSponsor = new javax.swing.JTable();
+        btnRequestS = new javax.swing.JButton();
+        tfS = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -150,79 +179,164 @@ public class EventOrganizerPage extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
+        tblVenue.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblVenueMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tblVenue);
+        if (tblVenue.getColumnModel().getColumnCount() > 0) {
+            tblVenue.getColumnModel().getColumn(0).setHeaderValue("id");
+            tblVenue.getColumnModel().getColumn(4).setHeaderValue("cost");
+        }
 
         btnRequestVenue.setText("Request venue");
+        btnRequestVenue.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRequestVenueActionPerformed(evt);
+            }
+        });
+
+        jLabel8.setText("Event ID:");
+
+        tblSponsor.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "name", "type", "establish_date"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblSponsor.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblSponsorMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(tblSponsor);
+
+        btnRequestS.setText("Request sponsor");
+        btnRequestS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRequestSActionPerformed(evt);
+            }
+        });
+
+        tfS.setText("How much sponsorship？");
+        tfS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfSActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Create Event");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(63, 63, 63)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(tfEventName)
-                    .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
-                    .addComponent(tfCustomerCapacity)
-                    .addComponent(tfPrice)
-                    .addComponent(tfVTCapacity)
-                    .addComponent(tfSponsor)
-                    .addComponent(tfPlace))
-                .addGap(90, 90, 90)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnRequestVenue)
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(63, 63, 63)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(tfEventName)
+                            .addComponent(dateChooser, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                            .addComponent(tfCustomerCapacity)
+                            .addComponent(tfPrice)
+                            .addComponent(tfVTCapacity)
+                            .addComponent(tfSponsor)
+                            .addComponent(tfPlace)
+                            .addComponent(tfeventid))
+                        .addGap(81, 81, 81)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnRequestVenue)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(tfS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnRequestS))))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(303, 303, 303)
+                        .addComponent(jButton1)))
+                .addContainerGap(150, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(52, 52, 52)
+                        .addGap(23, 23, 23)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel8)
+                            .addComponent(tfeventid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(tfEventName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel1)
-                                    .addComponent(tfEventName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(26, 26, 26)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel3)
-                                    .addComponent(tfPlace, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel4)
-                                    .addComponent(tfSponsor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel2)
+                            .addComponent(dateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(tfPlace, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(tfSponsor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
                             .addComponent(tfCustomerCapacity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(27, 27, 27)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6)
                             .addComponent(tfPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel7)
                             .addComponent(tfVTCapacity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(99, 99, 99)
-                        .addComponent(btnRequestVenue)))
-                .addContainerGap(122, Short.MAX_VALUE))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnRequestVenue)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnRequestS)
+                            .addComponent(tfS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(18, 18, 18)
+                .addComponent(jButton1)
+                .addContainerGap(99, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Create event", jPanel2);
@@ -231,7 +345,7 @@ public class EventOrganizerPage extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 865, Short.MAX_VALUE)
+            .addComponent(jTabbedPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -239,10 +353,77 @@ public class EventOrganizerPage extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void tblVenueMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVenueMouseClicked
+        int selectedRowIndex = tblVenue.getSelectedRow();
+        modelVenue = (DefaultTableModel) tblVenue.getModel();
+        selectedVenue = (Venue)modelVenue.getValueAt(tblVenue.convertRowIndexToModel(selectedRowIndex), 0);
+        
+        
+    }//GEN-LAST:event_tblVenueMouseClicked
+
+    private void btnRequestVenueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRequestVenueActionPerformed
+        String eventid = tfeventid.getText();
+
+        String query = " insert into venue_request(event_id, organiser_id, venue_id, status, amount)"
+        + " values ("+eventid+","+ eventOrganizer.getUserAccount().getUser_id()+ "," + selectedVenue.getId()+ "," + "'pending'"+ "," + selectedVenue.getCost()+")";  
+        database.insert(query);
+        newEvent.setLocation(selectedVenue.getLocation());
+        tfPlace.setText(selectedVenue.getLocation()+" request pending");
+    }//GEN-LAST:event_btnRequestVenueActionPerformed
+
+    private void tblSponsorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSponsorMouseClicked
+       int selectedRowIndex = tblSponsor.getSelectedRow();
+        modelS = (DefaultTableModel) tblSponsor.getModel();
+        selectedSponsor = (Sponsor)modelS.getValueAt(tblSponsor.convertRowIndexToModel(selectedRowIndex), 0);
+        
+    }//GEN-LAST:event_tblSponsorMouseClicked
+
+    private void btnRequestSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRequestSActionPerformed
+         int eventid;
+        int sponsorship;
+        try{
+            eventid = Integer.valueOf(tfeventid.getText());
+            sponsorship = Integer.valueOf(tfS.getText());
+            String query = " insert into sponsor_request(event_id, sponsor_id, status, amount, organizer_id)"
+        + " values ("+eventid+","+ selectedSponsor.getLic_no()+ "," + "'pending'"+ ","+ tfS.getText() + "," + eventOrganizer.getUserAccount().getUser_id()+")";  
+        database.insert(query);
+        } catch(Exception e) {
+            JOptionPane.showMessageDialog(this, "Please enter number for eventID and sponsorship");
+        }
+        
+        newEvent.setSponsor(selectedSponsor.getName());
+        tfSponsor.setText(selectedSponsor.getName()+" request pending");
+    }//GEN-LAST:event_btnRequestSActionPerformed
+
+    private void tfSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfSActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfSActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String eventId = tfeventid.getText();
+        String eventName = tfEventName.getText();
+        
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String eventDate = formatter.format(dateChooser.getDate());
+        int customerCapacity = Integer.valueOf(tfCustomerCapacity.getText());
+        int price = Integer.valueOf(tfPrice.getText());
+        String volunteerCapacity = tfVTCapacity.getText();
+       
+        
+        int sponsorship = Integer.valueOf(tfS.getText());
+                
+        String query = " insert into event(event_id, event_name, budget, status, volunteer_capacity, date, location, event_organizer, customer_capacity, price)"
+        + " values ("+eventId+",'"+ eventName+ "'," +sponsorship+","+ "'upcoming'"+ ",'"+volunteerCapacity+"','"+eventDate+"','" +selectedVenue.getLocation()+"',"+ eventOrganizer.getUserAccount().getUser_id()+","+customerCapacity+","+price+")";  
+        System.out.println(query);
+        database.insert(query);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnRequestS;
     private javax.swing.JButton btnRequestVenue;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
+    private com.toedter.calendar.JDateChooser dateChooser;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -250,19 +431,24 @@ public class EventOrganizerPage extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTable tblSponsor;
     private javax.swing.JTable tblVenue;
     private javax.swing.JTextField tfCustomerCapacity;
     private javax.swing.JTextField tfEventName;
     private javax.swing.JTextField tfPlace;
     private javax.swing.JTextField tfPrice;
+    private javax.swing.JTextField tfS;
     private javax.swing.JTextField tfSponsor;
     private javax.swing.JTextField tfVTCapacity;
+    private javax.swing.JTextField tfeventid;
     // End of variables declaration//GEN-END:variables
 
 
@@ -279,9 +465,10 @@ public class EventOrganizerPage extends javax.swing.JPanel {
                 venue.setId(rs.getInt("reg_id"));
                 venue.setName(rs.getString("name"));
                 venue.setType(rs.getString("type"));
-                venue.setCapacity(rs.getInt("seat_capapcity"));
+                venue.setCapacity(rs.getInt("seat_capacity"));
                 venue.setLocation(rs.getString("zip_code"));
                 venue.setCost(rs.getInt("cost"));
+                venues.add(venue);
             }
 
             rs.close();
@@ -303,6 +490,43 @@ public class EventOrganizerPage extends javax.swing.JPanel {
             modelVenue.addRow(row);
         }
     }
+
+    private void dbGetSponsor() {
+        try{  
+            Class.forName("com.mysql.cj.jdbc.Driver");  
+            Connection con=DriverManager.getConnection(  
+            "jdbc:mysql://localhost:3306/ems_5100","root","root");   
+            Statement stmt=con.createStatement();  
+            ResultSet rs=stmt.executeQuery("select * from sponsor");  
+            
+            while(rs.next()) {
+                Sponsor sponsor = new Sponsor();
+                sponsor.setLic_no(rs.getInt("reg_id"));
+                sponsor.setBusiness_type(rs.getString("type"));
+                sponsor.setEst_date(rs.getDate("establish_date"));
+                sponsor.setName(rs.getString("name"));
+                
+                sponsors.add(sponsor);
+            }
+            rs.close();
+            con.close();  
+            }catch(Exception e){ System.out.println(e);}  
+        
+    }
+
+    private void populateSponsorTable() {
+        modelS= (DefaultTableModel) tblSponsor.getModel();
+        modelS.setRowCount(0);
+        for(Sponsor sponsor: sponsors) {
+            Object[] row = new Object[3];
+            row[0] = sponsor;
+            row[1] = sponsor.getBusiness_type();
+            row[2] = sponsor.getEst_date(); 
+            modelS.addRow(row);
+        }
+    }
+    
+    
     
 
 }

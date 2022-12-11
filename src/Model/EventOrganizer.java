@@ -54,4 +54,19 @@ public class EventOrganizer {
         return event;
     }
 
+    
+    UserAccount userAccount;
+
+    public EventOrganizer(UserAccount userAccount) {
+        this.userAccount = userAccount;
+    }
+
+    public UserAccount getUserAccount() {
+        return userAccount;
+    }
+
+    public void setUserAccount(UserAccount userAccount) {
+        this.userAccount = userAccount;
+    }
+    
 }

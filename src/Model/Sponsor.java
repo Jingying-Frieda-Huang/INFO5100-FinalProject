@@ -54,6 +54,8 @@ public class Sponsor {
     public void setBusiness_type(String business_type) {
         this.business_type = business_type;
     }
+    
+    
 
     @Override
     public String toString() {
