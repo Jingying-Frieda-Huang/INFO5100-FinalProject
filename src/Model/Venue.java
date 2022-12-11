@@ -15,6 +15,7 @@ public class Venue {
     private int capacity;
     private String type;
     private double cost;
+    UserAccount user;
 
     public Venue(String name, String location, int capacity, String type, double cost) {
         this.name = name;
