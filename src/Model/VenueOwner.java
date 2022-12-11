@@ -12,12 +12,21 @@ public class VenueOwner {
     Profile profile; 
     UserAccount user;
     Venue venue;
+    private int venue_id;
 
     public VenueOwner() {
     }
 
     public VenueOwner(UserAccount user) {
         this.user = user;
+    }
+
+    public int getVenue_id() {
+        return venue_id;
+    }
+
+    public void setVenue_id(int venue_id) {
+        this.venue_id = venue_id;
     }
 
     public UserAccount getUser() {

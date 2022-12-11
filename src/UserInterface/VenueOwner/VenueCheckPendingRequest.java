@@ -59,7 +59,6 @@ public class VenueCheckPendingRequest extends javax.swing.JPanel {
         tblVenueReq = new javax.swing.JTable();
         btnAccept = new javax.swing.JButton();
         btnDecline = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
 
         jLabel1.setText("Welcome, Venue Owner");
 
@@ -101,8 +100,6 @@ public class VenueCheckPendingRequest extends javax.swing.JPanel {
             }
         });
 
-        jButton3.setText("Check Availability");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -117,12 +114,9 @@ public class VenueCheckPendingRequest extends javax.swing.JPanel {
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 602, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(138, 138, 138)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton3)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnAccept)
-                                .addGap(196, 196, 196)
-                                .addComponent(btnDecline)))))
+                        .addComponent(btnAccept)
+                        .addGap(196, 196, 196)
+                        .addComponent(btnDecline)))
                 .addContainerGap(68, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -138,9 +132,7 @@ public class VenueCheckPendingRequest extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnDecline)
                     .addComponent(btnAccept))
-                .addGap(18, 18, 18)
-                .addComponent(jButton3)
-                .addContainerGap(160, Short.MAX_VALUE))
+                .addContainerGap(201, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -192,7 +184,6 @@ public class VenueCheckPendingRequest extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAccept;
     private javax.swing.JButton btnDecline;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
