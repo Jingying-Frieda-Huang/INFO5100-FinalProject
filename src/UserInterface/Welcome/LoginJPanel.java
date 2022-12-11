@@ -58,7 +58,7 @@ public class LoginJPanel extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         cbRole = new javax.swing.JComboBox<>();
-        btnLogin = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         tfEmail = new javax.swing.JTextField();
         tfPassword = new javax.swing.JPasswordField();
 
@@ -76,11 +76,11 @@ public class LoginJPanel extends javax.swing.JPanel {
 
         cbRole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "customer", "event organizer", "catering service provider", "Venue Service Provider", "Attendee", "Sponsor", "ticket manager", "volunteer", "bank" }));
 
-        btnLogin.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
-        btnLogin.setText("Login");
-        btnLogin.addActionListener(new java.awt.event.ActionListener() {
+        jButton1.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
+        jButton1.setText("Login");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLoginActionPerformed(evt);
+                jButton1ActionPerformed(evt);
             }
         });
 
@@ -93,7 +93,7 @@ public class LoginJPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(124, 124, 124)
-                        .addComponent(btnLogin))
+                        .addComponent(jButton1))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(17, 17, 17)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -130,12 +130,12 @@ public class LoginJPanel extends javax.swing.JPanel {
                     .addComponent(jLabel4)
                     .addComponent(cbRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(59, 59, 59)
-                .addComponent(btnLogin)
+                .addComponent(jButton1)
                 .addContainerGap(102, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String email = tfEmail.getText();
         String psw = tfPassword.getText();
         String role = String.valueOf(cbRole.getSelectedItem());
@@ -178,12 +178,12 @@ public class LoginJPanel extends javax.swing.JPanel {
 //        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
             
           
-    }//GEN-LAST:event_btnLoginActionPerformed
+    }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnLogin;
     private javax.swing.JComboBox<String> cbRole;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
