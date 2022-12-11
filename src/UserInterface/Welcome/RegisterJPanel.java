@@ -4,9 +4,15 @@
  */
 package UserInterface.Welcome;
 
+import Model.Database;
+import Model.Event;
+import Model.UserAccount;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -21,9 +27,20 @@ public class RegisterJPanel extends javax.swing.JPanel {
      */
     javax.swing.JPanel CardSequencePanel;
     
+    Database database;
+    ArrayList<UserAccount> userAccounts;
+    boolean flag;
+    
     public RegisterJPanel(JPanel clp) {
         this.CardSequencePanel = clp;
         initComponents();
+        
+        database = new Database();
+        userAccounts = new ArrayList<>();
+        
+        dbGetUserAccount();
+        
+        flag = true;
     }
 
     /**
@@ -123,24 +140,16 @@ public class RegisterJPanel extends javax.swing.JPanel {
         String psw = tfPsw.getText();
         String role = String.valueOf(cbRole.getSelectedItem());
         
-        try{  
-            Class.forName("com.mysql.cj.jdbc.Driver");  
-            Connection con=DriverManager.getConnection(  
-            "jdbc:mysql://localhost:3306/final5100","root","root");  
-            //here sonoo is database name, root is username and password  
-            String query = " insert into user_account (name, password, role, email)"
-            + " values ('"+name+"','"+ psw+ "','" + role + "','"+ email + "')";  
-            System.out.print(query);
-            PreparedStatement preparedStmt = con.prepareStatement(query);             
-            preparedStmt.execute();
-            con.close();  
-            }catch(Exception e){ System.out.println(e);}
+        registerDataValidation(name, email, psw, role);
+        System.out.println(flag);
+        if(flag == true) {
+            insertUserAccount(name, email, psw, role);
          JOptionPane.showMessageDialog(this, "Register Successfully");
          
         LoginJPanel loginJPanel = new LoginJPanel(CardSequencePanel);
         CardSequencePanel.removeAll();
         CardSequencePanel.add("Login page", loginJPanel);
-        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);}
     }//GEN-LAST:event_RegisterActionPerformed
 
 
@@ -156,4 +165,61 @@ public class RegisterJPanel extends javax.swing.JPanel {
     private javax.swing.JTextField tfName;
     private javax.swing.JTextField tfPsw;
     // End of variables declaration//GEN-END:variables
+
+    public void registerDataValidation(String name, String email, String psw, String role){
+        
+        
+        if ((email == null) || (email.equals("")) || (!email.matches("^(.+)@(.+)$"))) { flag = false; JOptionPane.showMessageDialog(this, "Please follow email format");}
+
+        for(UserAccount userAccount: userAccounts) {
+            if(email.equals(userAccount.getEmail()) && role.equals(userAccount.getRole())) {
+                flag = false;
+                JOptionPane.showMessageDialog(this, "account already existed");
+                break;
+            }
+        }
+        
+        if ((psw == null) || (psw.equals(""))) {flag = false; JOptionPane.showMessageDialog(this, "Please enter password");}
+        
+        if ((name == null) || (name.equals("")) || (!name.matches("^[a-zA-Z]*$"))) { flag = false; JOptionPane.showMessageDialog(this, "Please follow name format");}
+
+    }
+    
+    public void dbGetUserAccount(){
+        try{  
+            Class.forName("com.mysql.cj.jdbc.Driver");  
+            Connection con=DriverManager.getConnection(  
+            "jdbc:mysql://localhost:3306/ems_5100","root","root");   
+            Statement stmt=con.createStatement();  
+            ResultSet rs=stmt.executeQuery("SELECT * FROM user_account"); 
+            
+            
+            while(rs.next()) {
+                UserAccount userAccount = new UserAccount();
+                userAccount.setUser_id(String.valueOf(rs.getInt("user_id")));
+                userAccount.setName(rs.getString("name"));
+                userAccount.setPassword(rs.getString("password"));
+                userAccount.setRole(rs.getString("role"));
+                userAccount.setEmail(rs.getString("email"));
+                userAccount.setFinance(rs.getInt("finance"));
+    
+                userAccounts.add(userAccount);
+               
+            }
+
+            rs.close();
+            con.close();  
+            }catch(Exception e){ System.out.println(e);}  
+    }
+    
+    
+    public void insertUserAccount(String name, String email, String psw, String role){
+        
+        String insertsql = "insert into user_account (name, password, role, email)"
+            + " values ('"+name+"','"+ psw+ "','" + role+"','"+email+"')";   
+        database.insert(insertsql);
+    }
+
+
+
 }
