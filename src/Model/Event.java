@@ -15,20 +15,16 @@ import java.util.Date;
  */
 public class Event {
 
-    
     String description;
 
     double duration;
     EventOrganizer evtOrganizer;
-    
+
     int totalTickets;
     ArrayList<Ticket> tickets;
     ArrayList<EndUser> attendees;
-    boolean isInPerson; 
+    boolean isInPerson;
     ArrayList<Volunteer> volunteers;
-    
-    
-
 
     public Event(String name, String description, String location, double duration, EventOrganizer evtOrganizer, Date date, int totalTickets, boolean isInPerson) {
         this.name = name;
@@ -122,11 +118,12 @@ public class Event {
     public void setIsInPerson(boolean isInPerson) {
         this.isInPerson = isInPerson;
     }
-    
+
     ////////////////////////////////////////////////////////////////////////////////////
     //this create because volunteer page need volunteer capacity
-    public Event(){}
-    
+    public Event() {
+    }
+
     public Event(int evnet_id, String name, Date date, String location, String volunteerCapacity) {
         this.event_id = event_id;
         this.name = name;
@@ -158,9 +155,7 @@ public class Event {
     public void setEvent_id(int event_id) {
         this.event_id = event_id;
     }
-    
-    
-    
+
     int event_id;
     String name;
     String eventOrganizer;
@@ -171,6 +166,10 @@ public class Event {
     String volunteerCapacity;
     int ticketPrice;
     String state;
+    int year;
+    String venue;
+    String time;
+    
 
     public Event(int event_id, String name, String eventOrganizer, Date date, String location, String sponsor, String customerCapacity, String volunteerCapacity, int ticketPrice, String state) {
         this.event_id = event_id;
@@ -183,7 +182,10 @@ public class Event {
         this.volunteerCapacity = volunteerCapacity;
         this.ticketPrice = ticketPrice;
         this.state = state;
+        
     }
+    
+    
 
     public String getEventOrganizer() {
         return eventOrganizer;
@@ -193,9 +195,16 @@ public class Event {
         this.eventOrganizer = eventOrganizer;
     }
 
-
     public String getSponsor() {
         return sponsor;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public int getYear() {
+        return year;
     }
 
     public void setSponsor(String sponsor) {
@@ -225,15 +234,10 @@ public class Event {
     public void setState(String state) {
         this.state = state;
     }
-   
-    
-    
-    
-    
-    
+
     public String toString() {
         return getName();
     }
     ///////////////////////////////////////////////////////////////////////////////
-    
+
 }

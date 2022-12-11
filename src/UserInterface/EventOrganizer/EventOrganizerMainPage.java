@@ -4,8 +4,16 @@
  */
 package UserInterface.EventOrganizer;
 
-import UserInterface.Welcome.RegisterJPanel;
+import Model.Event;
+import Model.EventOrganizer;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -17,10 +25,18 @@ public class EventOrganizerMainPage extends javax.swing.JPanel {
      * Creates new form EventOrganizerMainPage
      */
     javax.swing.JPanel CardSequencePanel;
-    
-    public EventOrganizerMainPage(JPanel clp) {
+    EventOrganizer eventOrganizer;
+    ArrayList<Event> events;
+    DefaultTableModel model;
+
+    public EventOrganizerMainPage(JPanel clp, EventOrganizer eventOrganizer) {
         this.CardSequencePanel = clp;
+        this.eventOrganizer = eventOrganizer;
+        events = new ArrayList<>();
         initComponents();
+        loadEvents();
+        populateEventTable();
+        setNumOfEvents();
     }
 
     /**
@@ -37,9 +53,9 @@ public class EventOrganizerMainPage extends javax.swing.JPanel {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        numOfEvent = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        evtTable = new javax.swing.JTable();
 
         jLabel1.setText("Welcome, Event Organizer");
 
@@ -66,9 +82,10 @@ public class EventOrganizerMainPage extends javax.swing.JPanel {
 
         jLabel2.setText("Total Hosted Events");
 
-        jLabel3.setText("<<number of event>>");
+        numOfEvent.setFont(new java.awt.Font("Helvetica Neue", 1, 48)); // NOI18N
+        numOfEvent.setText("0");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        evtTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
                 {null, null},
@@ -87,7 +104,7 @@ public class EventOrganizerMainPage extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(evtTable);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -96,13 +113,15 @@ public class EventOrganizerMainPage extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(48, 48, 48)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2))))
+                            .addComponent(jLabel2)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(52, 52, 52)
+                                .addComponent(numOfEvent))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addComponent(jLabel1)))
                 .addGap(82, 82, 82)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -127,8 +146,8 @@ public class EventOrganizerMainPage extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(87, 87, 87)
                         .addComponent(jLabel2)
-                        .addGap(54, 54, 54)
-                        .addComponent(jLabel3))
+                        .addGap(28, 28, 28)
+                        .addComponent(numOfEvent))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(59, 59, 59)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -137,7 +156,7 @@ public class EventOrganizerMainPage extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        EventOrganizerEvents eventOrganizerEvents = new EventOrganizerEvents(CardSequencePanel);
+        EventOrganizerEvents eventOrganizerEvents = new EventOrganizerEvents(CardSequencePanel, eventOrganizer);
         CardSequencePanel.removeAll();
         CardSequencePanel.add("Organizer Events", eventOrganizerEvents);
         ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
@@ -158,15 +177,57 @@ public class EventOrganizerMainPage extends javax.swing.JPanel {
         ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    public void loadEvents() {
+        try {
+            String DB_URL = "jdbc:mysql://localhost:3306/final5100";
+            String USER = "root";
+            String PASS = "root";
+
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection(DB_URL, USER, PASS);
+            Statement stmt = con.createStatement();
+
+            ResultSet rs = stmt.executeQuery("select * from event");
+
+            while (rs.next()) {
+                Event event = new Event();
+                event.setName(rs.getString("name"));
+                event.setYear(rs.getInt("year")); // Added New Column year to the table
+                events.add(event);
+            }
+
+            rs.close();
+            con.close();
+
+        } catch (ClassNotFoundException | SQLException e) {
+            System.out.println(e);
+        }
+    }
+
+    public void populateEventTable() {
+        model = (DefaultTableModel) evtTable.getModel();
+        model.setRowCount(0);
+        for (Event event : events) {
+            Object[] row = new Object[2];
+            row[0] = event.getYear();
+            row[1] = event.getName();
+            model.addRow(row);
+        }
+    }
+
+    public void setNumOfEvents() {
+        numOfEvent.setText(Integer.toString(events.size()));
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable evtTable;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JLabel numOfEvent;
     // End of variables declaration//GEN-END:variables
 }

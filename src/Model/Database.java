@@ -42,6 +42,7 @@ public class Database {
             Statement stmt=con.createStatement();             
             System.out.print(updateSQL);
             stmt.executeUpdate(updateSQL);
+            stmt.executeUpdate("commit");
             System.out.print("execute2");
             con.close();  
             }catch(Exception e){ System.out.println(e);}  
@@ -56,6 +57,7 @@ public class Database {
             this.url,this.user,this.password);   
             PreparedStatement preparedStmt = con.prepareStatement(insertSQL);             
             preparedStmt.execute();
+            preparedStmt.executeUpdate("commit");
 //            System.out.print("execute1");
             con.close();  
             }catch(Exception e){ System.out.println(e);}

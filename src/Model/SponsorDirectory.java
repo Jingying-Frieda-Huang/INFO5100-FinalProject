@@ -48,65 +48,65 @@ public class SponsorDirectory {
     }
     
     public void deleteSponsor(Sponsor sp){
-        if (con != null){
-            try {
-                String sql = "DELETE FROM sponsor WHERE reg_id = " + Integer.toString(sp.getLic_no()) ;
-                
-                st = con.prepareStatement(sql);
-                st.executeUpdate();
-                st.executeUpdate("commit"); 
-            } catch (SQLException ex) {
-                Logger.getLogger(SponsorDirectory.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+//        if (con != null){
+//            try {
+//                String sql = "DELETE FROM sponsor WHERE reg_id = " + Integer.toString(sp.getLic_no()) ;
+//                
+//                st = con.prepareStatement(sql);
+//                st.executeUpdate();
+//                st.executeUpdate("commit"); 
+//            } catch (SQLException ex) {
+//                Logger.getLogger(SponsorDirectory.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        }
     }
     
     public ArrayList<Sponsor> getSponsorList(){
-        if (con != null){
-            ArrayList<Sponsor> spList = new ArrayList<>();
-            String sql = "SELECT * FROM sponsor";
-            
-            try {
-                st = con.prepareStatement(sql);
-                rs = st.executeQuery();
-                
-                while(rs.next()){
-                    Sponsor v = new Sponsor();
-                    v.setLic_no(rs.getInt("reg_id"));
-                    v.setName(rs.getString("name"));
-                    v.setBusiness_type(rs.getString("type"));
-//                    v.setEst_date(rs.getDate("establish_date"));  //pending 
-                    spList.add(v);
-                }
-                
-                
-            } catch (SQLException ex) {
-                Logger.getLogger(SponsorDirectory.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            return spList;
-        }
+//        if (con != null){
+//            ArrayList<Sponsor> spList = new ArrayList<>();
+//            String sql = "SELECT * FROM sponsor";
+//            
+//            try {
+//                st = con.prepareStatement(sql);
+//                rs = st.executeQuery();
+//                
+//                while(rs.next()){
+//                    Sponsor v = new Sponsor();
+//                    v.setLic_no(rs.getInt("reg_id"));
+//                    v.setName(rs.getString("name"));
+//                    v.setBusiness_type(rs.getString("type"));
+////                    v.setEst_date(rs.getDate("establish_date"));  //pending 
+//                    spList.add(v);
+//                }
+//                
+//                
+//            } catch (SQLException ex) {
+//                Logger.getLogger(SponsorDirectory.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//            
+//            return spList;
+//        }
         return new ArrayList<>();      
     }
     
     public void updateSponsor(Sponsor sp, String field, String value, boolean isNumber){
-        if (con!=null){
-            try {
-                String sql;
-                
-                if (isNumber){
-                    sql = "UPDATE sponsor SET " +field+ " = " + value + " WHERE reg_id =" +sp.getLic_no();
-                }
-                else{
-                    sql = "UPDATE sponsor SET " +field+ " = '" + value + "' WHERE reg_id =" +sp.getLic_no();
-                }
-                
-                st = con.prepareStatement(sql);
-                st.executeUpdate();
-                st.executeUpdate("commit");
-            } catch (SQLException ex) {
-                Logger.getLogger(SponsorDirectory.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+//        if (con!=null){
+//            try {
+//                String sql;
+//                
+//                if (isNumber){
+//                    sql = "UPDATE sponsor SET " +field+ " = " + value + " WHERE reg_id =" +sp.getLic_no();
+//                }
+//                else{
+//                    sql = "UPDATE sponsor SET " +field+ " = '" + value + "' WHERE reg_id =" +sp.getLic_no();
+//                }
+//                
+//                st = con.prepareStatement(sql);
+//                st.executeUpdate();
+//                st.executeUpdate("commit");
+//            } catch (SQLException ex) {
+//                Logger.getLogger(SponsorDirectory.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        }
     }
 }

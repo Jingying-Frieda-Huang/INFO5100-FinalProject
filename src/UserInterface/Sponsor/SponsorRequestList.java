@@ -4,14 +4,19 @@
  */
 package UserInterface.Sponsor;
 
+import Model.Database;
 import Model.Event;
 import Model.Sponsor;
 import Model.SponsorRequest;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
@@ -26,21 +31,22 @@ public class SponsorRequestList extends javax.swing.JPanel {
      * Creates new form SponsorRequestList
      */
     
-    DefaultTableModel model;
     TableRowSorter myTableRowSorter;
     ArrayList<SponsorRequest> reqList;
     Sponsor sp;
+    Database db;
     
     
     javax.swing.JPanel CardSequencePanel;
     public SponsorRequestList(JPanel clp, Sponsor sponsor) {
         this.CardSequencePanel = clp;
         this.sp = sponsor;
+        initComponents();
         
         reqList = new ArrayList<>();
         getAllRequests();
         populateRequestTable();
-        initComponents();
+        db = new Database();
     }
 
     /**
@@ -53,35 +59,14 @@ public class SponsorRequestList extends javax.swing.JPanel {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblRequest = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         btnAccept = new javax.swing.JButton();
         btnDeny = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblReq = new javax.swing.JTable();
 
         jLabel1.setText("Welcome, Sponsor");
-
-        tblRequest.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
-            },
-            new String [] {
-                "Event", "Donation request", "Status"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane1.setViewportView(tblRequest);
 
         jButton1.setText("View Organiser History");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -111,44 +96,63 @@ public class SponsorRequestList extends javax.swing.JPanel {
             }
         });
 
+        tblReq.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Event", "Amount", "Status"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tblReq);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
-                .addGap(34, 34, 34)
+                .addGap(96, 96, 96)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnAccept)
                         .addGap(18, 18, 18)
                         .addComponent(btnDeny))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel1)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 557, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(175, Short.MAX_VALUE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel1)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton1)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jButton2))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 524, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(343, 343, 343))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(34, 34, 34)
-                .addComponent(jLabel1)
-                .addGap(5, 5, 5)
+                .addGap(49, 49, 49)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
-                .addGap(43, 43, 43)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAccept)
                     .addComponent(btnDeny))
-                .addContainerGap(75, Short.MAX_VALUE))
+                .addContainerGap(138, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -169,11 +173,50 @@ public class SponsorRequestList extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void btnAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAcceptActionPerformed
+        int selectedRow = tblReq.getSelectedRow();
         
+        if (selectedRow < 0){
+            JOptionPane.showMessageDialog(this, "Please select a row to Accept.");
+            return ;
+        }
+        
+        DefaultTableModel model = (DefaultTableModel) tblReq.getModel();
+        SponsorRequest request = (SponsorRequest) model.getValueAt(selectedRow, 0);
+        
+        if (request.getStatus().equalsIgnoreCase("Accepted")){
+            JOptionPane.showMessageDialog(this, "Request already processed.");
+            return;
+        }
+        
+        String sqlInsert = "insert into transfer (sender, receiver, "
+                    + "type, amount, state, event, request_id) values ("+ request.getEventId() +","+ 
+                    request.getSponsorId() +",'sponsorship'," + request.getAmount()+", 'pending',"
+                    + request.getEventId() + ","+ request.getRequestId() +")";
+        db.insert(sqlInsert);
+        
+        String sqlUpdate = "update sponsor_request set status = 'In-Progress' where request_id ="+ request.getRequestId();
+        db.update(sqlUpdate);
+        
+        JOptionPane.showMessageDialog(this, "Amount transfer initiated.");
+        
+        populateRequestTable();
     }//GEN-LAST:event_btnAcceptActionPerformed
 
     private void btnDenyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDenyActionPerformed
+        int selectedRow = tblReq.getSelectedRow();
         
+        if (selectedRow < 0){
+            JOptionPane.showMessageDialog(this, "Please select a row to Deny.");
+            return ;
+        }
+        
+        DefaultTableModel model = (DefaultTableModel) tblReq.getModel();
+        SponsorRequest request = (SponsorRequest) model.getValueAt(selectedRow, 0);
+        
+        String sqlUpdate = "update sponsor_request set status = 'Rejected' where request_id ="+ request.getRequestId();
+        db.update(sqlUpdate);
+        
+        populateRequestTable();
     }//GEN-LAST:event_btnDenyActionPerformed
 
 
@@ -184,7 +227,7 @@ public class SponsorRequestList extends javax.swing.JPanel {
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblRequest;
+    private javax.swing.JTable tblReq;
     // End of variables declaration//GEN-END:variables
 
     private void getAllRequests() {
@@ -193,7 +236,9 @@ public class SponsorRequestList extends javax.swing.JPanel {
             Connection con=DriverManager.getConnection(  
             "jdbc:mysql://localhost:3306/ems_5100","root","root");   
             Statement stmt=con.createStatement();  
-            ResultSet rs=stmt.executeQuery("select * from sponsor_request where sponsor_id = " + sp.getLic_no());  
+//            sponsor id is the same as user id
+//            for all the models user id will be the identity
+            ResultSet rs=stmt.executeQuery("select * from sponsor_request where sponsor_id = " + sp.getUser().getUser_id());  
             
             while(rs.next()) {
                 SponsorRequest spRequest = new SponsorRequest();
@@ -212,8 +257,9 @@ public class SponsorRequestList extends javax.swing.JPanel {
     }
 
     private void populateRequestTable() {
-        model = (DefaultTableModel) tblRequest.getModel();
+        DefaultTableModel model = (DefaultTableModel)tblReq.getModel();
         model.setRowCount(0);
+        
         for(SponsorRequest s: reqList) {
             Object[] row = new Object[3];
             row[0] = s;
@@ -222,6 +268,5 @@ public class SponsorRequestList extends javax.swing.JPanel {
             model.addRow(row);
         }
     }
-    
     
 }
