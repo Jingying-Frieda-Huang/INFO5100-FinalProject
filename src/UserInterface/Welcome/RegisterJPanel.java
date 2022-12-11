@@ -126,7 +126,7 @@ public class RegisterJPanel extends javax.swing.JPanel {
         try{  
             Class.forName("com.mysql.cj.jdbc.Driver");  
             Connection con=DriverManager.getConnection(  
-            "jdbc:mysql://localhost:3306/final5100","root","root");  
+            "jdbc:mysql://localhost:3306/ems_5100","root","root");  
             //here sonoo is database name, root is username and password  
             String query = " insert into user_account (name, password, role, email)"
             + " values ('"+name+"','"+ psw+ "','" + role + "','"+ email + "')";  

@@ -255,8 +255,20 @@ public class ProcessTransfer extends javax.swing.JPanel {
     }
     
     public void changeTransferState(){
+        String query="";
         selectedTransfer.setState("completed");
         String sql = "UPDATE transfer " + "SET state = '" + "completed" + "' WHERE id = '" + selectedTransfer.getId()+ "';";
         database.update(sql);
+        
+        //update the request records as soon as transfer is completed so the same is reflected 
+        //to sponsor/venue models on their page 
+        if (selectedTransfer.getType() == "sponsorship"){
+            query= "update sponsor_request set status = 'Completed' where request_id = "+selectedTransfer.getRequestId();
+        }
+        else if (selectedTransfer.getType() == "venueBooking"){
+            query= "update venue_request set status = 'Completed' where request_id = "+selectedTransfer.getRequestId();
+        }
+        
+        database.update(query);
     }
 }

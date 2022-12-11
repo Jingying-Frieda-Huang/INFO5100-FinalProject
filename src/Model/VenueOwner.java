@@ -10,4 +10,31 @@ package Model;
  */
 public class VenueOwner {
     Profile profile; 
+    UserAccount user;
+    Venue venue;
+
+    public VenueOwner() {
+    }
+
+    public VenueOwner(UserAccount user) {
+        this.user = user;
+    }
+
+    public UserAccount getUser() {
+        return user;
+    }
+
+    public void setUser(UserAccount user) {
+        this.user = user;
+    }
+
+    public Venue getVenue() {
+        return venue;
+    }
+
+    public void setVenue(Venue venue) {
+        this.venue = venue;
+    }
+    
+    
 }

@@ -9,12 +9,15 @@ import Model.Event;
 import Model.Person;
 import Model.Sponsor;
 import Model.UserAccount;
+import Model.Venue;
+import Model.VenueOwner;
 import Model.Volunteer.Volunteer;
 import UserInterface.Bank.ProcessTransfer;
 import UserInterface.Customer.CustomerMain;
 import UserInterface.EventOrganizer.EventOrganizerMainPage;
 import UserInterface.Sponsor.SponsorMain;
 import UserInterface.TicketManager.TicketGenerate;
+import UserInterface.VenueOwner.VenueCheckPendingRequest;
 import UserInterface.VenueOwner.VenueOwnerMain;
 import UserInterface.Volunteer.VolunteerMain;
 import java.sql.Connection;
@@ -55,7 +58,7 @@ public class LoginJPanel extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         cbRole = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
+        btnLogin = new javax.swing.JButton();
         tfEmail = new javax.swing.JTextField();
         tfPassword = new javax.swing.JPasswordField();
 
@@ -73,11 +76,11 @@ public class LoginJPanel extends javax.swing.JPanel {
 
         cbRole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "customer", "event organizer", "catering service provider", "Venue Service Provider", "Attendee", "Sponsor", "ticket manager", "volunteer", "bank" }));
 
-        jButton1.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
-        jButton1.setText("Login");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnLogin.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
+        btnLogin.setText("Login");
+        btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnLoginActionPerformed(evt);
             }
         });
 
@@ -90,7 +93,7 @@ public class LoginJPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(124, 124, 124)
-                        .addComponent(jButton1))
+                        .addComponent(btnLogin))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(17, 17, 17)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -127,12 +130,12 @@ public class LoginJPanel extends javax.swing.JPanel {
                     .addComponent(jLabel4)
                     .addComponent(cbRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(59, 59, 59)
-                .addComponent(jButton1)
+                .addComponent(btnLogin)
                 .addContainerGap(102, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         String email = tfEmail.getText();
         String psw = tfPassword.getText();
         String role = String.valueOf(cbRole.getSelectedItem());
@@ -175,12 +178,12 @@ public class LoginJPanel extends javax.swing.JPanel {
 //        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
             
           
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnLoginActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnLogin;
     private javax.swing.JComboBox<String> cbRole;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -208,7 +211,7 @@ public class LoginJPanel extends javax.swing.JPanel {
                 dbName = rs.getString("name");
                 dbPsw = rs.getString("password");
                 dbRole = rs.getString("role");
-                if(password.equals(dbPsw) && role.equals(dbRole)){
+                if(password.equals(dbPsw) && role.equalsIgnoreCase(dbRole)){
                     flag = true;
                 }                
             }
@@ -237,16 +240,17 @@ public class LoginJPanel extends javax.swing.JPanel {
                     CardSequencePanel.removeAll();
                     CardSequencePanel.add("bank generate payment record", ProcessTransfer);
                     ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
-                } else if(role == "Sponsor"){
+                } else if(role.equalsIgnoreCase("Sponsor")){
                     Sponsor sponsor = new Sponsor(userAccount);
                     SponsorMain sponsorMain = new SponsorMain(CardSequencePanel, sponsor);
                     CardSequencePanel.removeAll();
                     CardSequencePanel.add("Sponsor", sponsorMain); 
                     ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
-                } else if(role == "Venue Service Provider"){
-                    VenueOwnerMain venueOwnerMain = new VenueOwnerMain(CardSequencePanel);
+                } else if(role.equalsIgnoreCase("Venue Service Provider")){
+                    Venue v = new Venue(userAccount);
+                    VenueCheckPendingRequest venue = new VenueCheckPendingRequest(CardSequencePanel, v);
                     CardSequencePanel.removeAll();
-                    CardSequencePanel.add("Venue Owner", venueOwnerMain);                    
+                    CardSequencePanel.add("Venue Owner", venue);                    
                     ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
                 } else if(role == "customer"){
                     Customer customer = new Customer(userAccount);
@@ -256,11 +260,6 @@ public class LoginJPanel extends javax.swing.JPanel {
                     ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
                 }
             }
-
-            
-        
     }
-
-
 
 }

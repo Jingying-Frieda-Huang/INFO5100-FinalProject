@@ -183,13 +183,18 @@ public class SponsorRequestList extends javax.swing.JPanel {
         DefaultTableModel model = (DefaultTableModel) tblReq.getModel();
         SponsorRequest request = (SponsorRequest) model.getValueAt(selectedRow, 0);
         
+        if (request.getStatus().equalsIgnoreCase("Accepted")){
+            JOptionPane.showMessageDialog(this, "Request already processed.");
+            return;
+        }
+        
         String sqlInsert = "insert into transfer (sender, receiver, "
-                    + "type, amount, state, event) values ("+ request.getEventId() +","+ 
+                    + "type, amount, state, event, request_id) values ("+ request.getEventId() +","+ 
                     request.getSponsorId() +",'sponsorship'," + request.getAmount()+", 'pending',"
-                    + request.getEventId() + ")";
+                    + request.getEventId() + ","+ request.getRequestId() +")";
         db.insert(sqlInsert);
         
-        String sqlUpdate = "update sponsor_request set status = 'Accepted'";
+        String sqlUpdate = "update sponsor_request set status = 'In-Progress' where request_id ="+ request.getRequestId();
         db.update(sqlUpdate);
         
         JOptionPane.showMessageDialog(this, "Amount transfer initiated.");
@@ -201,14 +206,14 @@ public class SponsorRequestList extends javax.swing.JPanel {
         int selectedRow = tblReq.getSelectedRow();
         
         if (selectedRow < 0){
-            JOptionPane.showMessageDialog(this, "Please select a row to Accept.");
+            JOptionPane.showMessageDialog(this, "Please select a row to Deny.");
             return ;
         }
         
         DefaultTableModel model = (DefaultTableModel) tblReq.getModel();
         SponsorRequest request = (SponsorRequest) model.getValueAt(selectedRow, 0);
         
-        String sqlUpdate = "update sponsor_request set status = 'Rejected'";
+        String sqlUpdate = "update sponsor_request set status = 'Rejected' where request_id ="+ request.getRequestId();
         db.update(sqlUpdate);
         
         populateRequestTable();
