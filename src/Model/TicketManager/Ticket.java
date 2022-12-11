@@ -83,5 +83,8 @@ public class Ticket {
         this.customerId = customerId;
     }
     
+    public String toString() {
+        return getId();
+    } 
     
 }

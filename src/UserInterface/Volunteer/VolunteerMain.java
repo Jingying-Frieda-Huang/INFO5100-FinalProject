@@ -209,7 +209,7 @@ public class VolunteerMain extends javax.swing.JPanel {
         try{  
             Class.forName("com.mysql.cj.jdbc.Driver");  
             Connection con=DriverManager.getConnection(  
-            "jdbc:mysql://localhost:3306/final5100","root","root");   
+            "jdbc:mysql://localhost:3306/ems_5100","root","root");   
             Statement stmt=con.createStatement();  
             ResultSet rs=stmt.executeQuery("select * from event");  
             
@@ -253,7 +253,7 @@ public class VolunteerMain extends javax.swing.JPanel {
         try{  
             Class.forName("com.mysql.cj.jdbc.Driver");  
             Connection con=DriverManager.getConnection(  
-            "jdbc:mysql://localhost:3306/final5100","root","root");  
+            "jdbc:mysql://localhost:3306/ems_5100","root","root");  
             //here sonoo is database name, root is username and password  
             String query = " insert into volunteer_history (user_id, event_id)"
             + " values ('"+volunteer.getUserAccount().getUser_id()+"','"+ selectedEvent.getEvent_id() + "')";  
