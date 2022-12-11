@@ -15,6 +15,7 @@ import Model.VenueOwner;
 import Model.Volunteer.Volunteer;
 import UserInterface.Bank.ProcessTransfer;
 import UserInterface.Customer.CustomerMain;
+import UserInterface.EventOrganizer.EventOrganizerPage;
 import UserInterface.EventOrganizer.EventOrganizerMainPage;
 import UserInterface.Report.Report;
 import UserInterface.Sponsor.SponsorMain;
@@ -175,11 +176,22 @@ public class LoginJPanel extends javax.swing.JPanel {
         //if you don't want to use userAccount, just write your page and it will works
 //        EventOrganizerMainPage eventOrganizerMainPage;
 //        eventOrganizerMainPage = new EventOrganizerMainPage(CardSequencePanel);
+
+//                CardSequencePanel.add("eventOrganizer", eventOrganizerMainPage);
+//        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+        
+//        VenueOwnerMain venueOwnerMain = new VenueOwnerMain(CardSequencePanel);
+//        CardSequencePanel.removeAll();
+//        CardSequencePanel.add("Venue Owner", venueOwnerMain);
+
+
+
 //        VenueOwnerMain venueOwnerMain = new VenueOwnerMain(CardSequencePanel);
 //        CardSequencePanel.removeAll();
 //        CardSequencePanel.add("Venue Owner", venueOwnerMain);
 //        CardSequencePanel.add("eventOrganizer", eventOrganizerMainPage);
 //        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+
 //        SponsorMain sponsorMain = new SponsorMain(CardSequencePanel);
 //        CardSequencePanel.removeAll();
 //        CardSequencePanel.add("Sponsor", sponsorMain);
@@ -199,6 +211,12 @@ public class LoginJPanel extends javax.swing.JPanel {
 
 
 
+//        Report report = new Report(CardSequencePanel);
+//        CardSequencePanel.removeAll();
+//        CardSequencePanel.add("report", report);
+//        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+
+
 
 
         Report report = new Report(CardSequencePanel);
@@ -208,6 +226,7 @@ public class LoginJPanel extends javax.swing.JPanel {
 
         
         }
+
 
           
 
