@@ -17,7 +17,8 @@ public class Venue {
     private double cost;
     UserAccount user;
 
-    public Venue(String name, String location, int capacity, String type, double cost) {
+    public Venue(int id, String name, String location, int capacity, String type, double cost) {
+        this.id = id;
         this.name = name;
         this.location = location;
         this.capacity = capacity;

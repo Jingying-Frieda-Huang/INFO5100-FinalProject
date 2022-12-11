@@ -15,6 +15,7 @@ import Model.VenueOwner;
 import Model.Volunteer.Volunteer;
 import UserInterface.Bank.ProcessTransfer;
 import UserInterface.Customer.CustomerMain;
+import UserInterface.EventOrganizer.EventOrganizerPage;
 import UserInterface.EventOrganizer.EventOrganizerMainPage;
 import UserInterface.Report.Report;
 import UserInterface.Sponsor.SponsorMain;
@@ -104,7 +105,9 @@ public class LoginJPanel extends javax.swing.JPanel {
                         .addGap(262, 262, 262)
                         .addComponent(jButton1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(144, 144, 144)
+                        .addGap(45, 45, 45)
+                        .addComponent(backBtn)
+                        .addGap(21, 21, 21)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(17, 17, 17)
@@ -121,19 +124,16 @@ public class LoginJPanel extends javax.swing.JPanel {
                                 .addComponent(jLabel1))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(51, 51, 51)
-                                .addComponent(jLabel4))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addComponent(backBtn)))
-                .addContainerGap(181, Short.MAX_VALUE))
+                                .addComponent(jLabel4)))))
+                .addContainerGap(187, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(backBtn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel1)
+                .addGap(41, 41, 41)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel1)
+                    .addComponent(backBtn))
                 .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -157,16 +157,22 @@ public class LoginJPanel extends javax.swing.JPanel {
         String email = tfEmail.getText();
         String psw = tfPassword.getText();
         String role = String.valueOf(cbRole.getSelectedItem());
-        
-        if(email.equals("") || psw.equals("")){
+
+        if (email.equals("") || psw.equals("")) {
 
             JOptionPane.showMessageDialog(this, "Please fill the account and password");
         } else {
 
-        authentication(email, psw, role);
-        //if you don't want to use userAccount, just write your page and it will works
+            authentication(email, psw, role);
+            //if you don't want to use userAccount, just write your page and it will works
 //        EventOrganizerMainPage eventOrganizerMainPage;
 //        eventOrganizerMainPage = new EventOrganizerMainPage(CardSequencePanel);
+
+//                CardSequencePanel.add("eventOrganizer", eventOrganizerMainPage);
+//        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+//        VenueOwnerMain venueOwnerMain = new VenueOwnerMain(CardSequencePanel);
+//        CardSequencePanel.removeAll();
+//        CardSequencePanel.add("Venue Owner", venueOwnerMain);
 //        VenueOwnerMain venueOwnerMain = new VenueOwnerMain(CardSequencePanel);
 //        CardSequencePanel.removeAll();
 //        CardSequencePanel.add("Venue Owner", venueOwnerMain);
@@ -188,14 +194,10 @@ public class LoginJPanel extends javax.swing.JPanel {
 //        CardSequencePanel.removeAll();
 //        CardSequencePanel.add("bank generate payment record", ProcessTransfer);
 //        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
-
 //        Report report = new Report(CardSequencePanel);
 //        CardSequencePanel.removeAll();
 //        CardSequencePanel.add("report", report);
 //        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
-
-
-        
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 

@@ -239,12 +239,12 @@ public class Report extends javax.swing.JPanel {
             Connection con=DriverManager.getConnection(  
             "jdbc:mysql://localhost:3306/ems_5100","root","root");   
             Statement stmt=con.createStatement();  
-            ResultSet rs=stmt.executeQuery("SELECT customer_id, SUM(money) AS \"total_spend\" FROM payment GROUP BY customer_id ORDER BY SUM(money) DESC;"); 
+            ResultSet rs=stmt.executeQuery("SELECT id, SUM(amount) AS \"total_spend\" from transfer WHERE type = \"payment\" GROUP BY id ORDER BY SUM(amount) DESC;"); 
             
             
             while(rs.next()) {
                 CustomerReport customerReport = new CustomerReport();
-                customerReport.setCustomerId(rs.getString("customer_id"));
+                customerReport.setCustomerId(rs.getString("id"));
                 customerReport.setTotalSpend(rs.getString("total_spend"));
                 customerReports.add(customerReport);
   
@@ -279,11 +279,11 @@ public class Report extends javax.swing.JPanel {
             Connection con=DriverManager.getConnection(  
             "jdbc:mysql://localhost:3306/ems_5100","root","root");   
             Statement stmt=con.createStatement();  
-            ResultSet rs=stmt.executeQuery("SELECT event_id, SUM(money) AS \"event_revenue\" FROM payment GROUP BY event_id ORDER BY SUM(money) DESC;"); 
+            ResultSet rs=stmt.executeQuery("SELECT event, SUM(amount) AS \"event_revenue\" FROM transfer WHERE type = \"payment\" GROUP BY event ORDER BY SUM(amount) DESC;"); 
 
             while(rs.next()) {
                 EventReport eventReport = new EventReport();
-                eventReport.setEventId(rs.getString("event_id"));
+                eventReport.setEventId(rs.getString("event"));
                 eventReport.setEventRevenue(rs.getString("event_revenue"));
                 eventReports.add(eventReport);
             }
