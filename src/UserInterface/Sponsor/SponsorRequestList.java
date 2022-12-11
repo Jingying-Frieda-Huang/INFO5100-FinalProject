@@ -4,14 +4,19 @@
  */
 package UserInterface.Sponsor;
 
+import Model.Database;
 import Model.Event;
 import Model.Sponsor;
 import Model.SponsorRequest;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
@@ -29,6 +34,7 @@ public class SponsorRequestList extends javax.swing.JPanel {
     TableRowSorter myTableRowSorter;
     ArrayList<SponsorRequest> reqList;
     Sponsor sp;
+    Database db;
     
     
     javax.swing.JPanel CardSequencePanel;
@@ -40,7 +46,7 @@ public class SponsorRequestList extends javax.swing.JPanel {
         reqList = new ArrayList<>();
         getAllRequests();
         populateRequestTable();
-        
+        db = new Database();
     }
 
     /**
@@ -129,7 +135,7 @@ public class SponsorRequestList extends javax.swing.JPanel {
                             .addComponent(jButton1)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(jButton2))
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 524, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 524, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(343, 343, 343))
         );
         layout.setVerticalGroup(
@@ -140,13 +146,13 @@ public class SponsorRequestList extends javax.swing.JPanel {
                     .addComponent(jLabel1)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
-                .addGap(40, 40, 40)
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAccept)
                     .addComponent(btnDeny))
-                .addContainerGap(93, Short.MAX_VALUE))
+                .addContainerGap(138, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -167,11 +173,45 @@ public class SponsorRequestList extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void btnAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAcceptActionPerformed
+        int selectedRow = tblReq.getSelectedRow();
         
+        if (selectedRow < 0){
+            JOptionPane.showMessageDialog(this, "Please select a row to Accept.");
+            return ;
+        }
+        
+        DefaultTableModel model = (DefaultTableModel) tblReq.getModel();
+        SponsorRequest request = (SponsorRequest) model.getValueAt(selectedRow, 0);
+        
+        String sqlInsert = "insert into transfer (sender, receiver, "
+                    + "type, amount, state, event) values ("+ request.getEventId() +","+ 
+                    request.getSponsorId() +",'sponsorship'," + request.getAmount()+", 'pending',"
+                    + request.getEventId() + ")";
+        db.insert(sqlInsert);
+        
+        String sqlUpdate = "update sponsor_request set status = 'Accepted'";
+        db.update(sqlUpdate);
+        
+        JOptionPane.showMessageDialog(this, "Amount transfer initiated.");
+        
+        populateRequestTable();
     }//GEN-LAST:event_btnAcceptActionPerformed
 
     private void btnDenyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDenyActionPerformed
+        int selectedRow = tblReq.getSelectedRow();
         
+        if (selectedRow < 0){
+            JOptionPane.showMessageDialog(this, "Please select a row to Accept.");
+            return ;
+        }
+        
+        DefaultTableModel model = (DefaultTableModel) tblReq.getModel();
+        SponsorRequest request = (SponsorRequest) model.getValueAt(selectedRow, 0);
+        
+        String sqlUpdate = "update sponsor_request set status = 'Rejected'";
+        db.update(sqlUpdate);
+        
+        populateRequestTable();
     }//GEN-LAST:event_btnDenyActionPerformed
 
 
