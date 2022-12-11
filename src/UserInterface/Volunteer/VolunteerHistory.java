@@ -135,7 +135,7 @@ public class VolunteerHistory extends javax.swing.JPanel {
         try{  
             Class.forName("com.mysql.cj.jdbc.Driver");  
             Connection con=DriverManager.getConnection(  
-            "jdbc:mysql://localhost:3306/final5100","root","root");   
+            "jdbc:mysql://localhost:3306/ems_5100","root","root");   
             Statement stmt=con.createStatement();  
             ResultSet rs=stmt.executeQuery("SELECT * FROM event join volunteer_history on event.event_id = volunteer_history.event_id WHERE user_id = " + volunteer.getUserAccount().getUser_id()); 
             
