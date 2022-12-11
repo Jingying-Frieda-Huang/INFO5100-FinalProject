@@ -123,10 +123,10 @@ public class VenueOwnerMain extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        VenueCheckPendingRequest venueCheckPendingRequest = new VenueCheckPendingRequest(CardSequencePanel);
-        CardSequencePanel.removeAll();
-        CardSequencePanel.add("Venue pending requests", venueCheckPendingRequest);
-        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+//        VenueCheckPendingRequest venueCheckPendingRequest = new VenueCheckPendingRequest(CardSequencePanel, new Venue());
+//        CardSequencePanel.removeAll();
+//        CardSequencePanel.add("Venue pending requests", venueCheckPendingRequest);
+//        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
