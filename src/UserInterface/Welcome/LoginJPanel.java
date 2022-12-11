@@ -199,12 +199,12 @@ public class LoginJPanel extends javax.swing.JPanel {
 
 
 
-//            temporarily commented
 
-//        Report report = new Report(CardSequencePanel);
-//        CardSequencePanel.removeAll();
-//        CardSequencePanel.add("report", report);
-//        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+
+        Report report = new Report(CardSequencePanel);
+        CardSequencePanel.removeAll();
+        CardSequencePanel.add("report", report);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
 
         
         }
