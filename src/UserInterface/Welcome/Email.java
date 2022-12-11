@@ -1,6 +1,5 @@
 package UserInterface.Welcome;
 
-
 import java.util.Date;
 import java.util.Properties;
 import javax.mail.Authenticator;
@@ -13,6 +12,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -24,10 +24,13 @@ import javax.swing.JOptionPane;
  */
 public class Email extends javax.swing.JPanel {
 
+    javax.swing.JPanel CardSequencePanel;
+
     /**
      * Creates new form Email
      */
-    public Email() {
+    public Email(JPanel clp) {
+        this.CardSequencePanel = clp;
         initComponents();
     }
 
@@ -52,6 +55,7 @@ public class Email extends javax.swing.JPanel {
         sendBtn = new javax.swing.JButton();
         from = new javax.swing.JTextField();
         fromLabel = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         title.setText("File Complaint");
@@ -100,11 +104,22 @@ public class Email extends javax.swing.JPanel {
 
         fromLabel.setText("From");
 
+        jButton1.setText("Back");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(title, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(title, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(98, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -130,8 +145,13 @@ public class Email extends javax.swing.JPanel {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(44, 44, 44)
-                .addComponent(title)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(44, 44, 44)
+                        .addComponent(title))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addComponent(jButton1)))
                 .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(fromLabel)
@@ -190,7 +210,9 @@ public class Email extends javax.swing.JPanel {
                 protected PasswordAuthentication getPasswordAuthentication() {
                     // used this video to solve Google Disabling Allow Less Secure App Option 
                     // https://www.youtube.com/watch?v=uVDq4VOBMNM
-                    return new PasswordAuthentication(from.getText(), "enter your email password");
+                    // NOTE: If you encounter java.lang.NoClassDefFoundError: javax/activation/DataHandler
+                    // Check this post https://stackoverflow.com/questions/48750800/eclipse-java-lang-noclassdeffounderror-javax-activation-datahandler
+                    return new PasswordAuthentication(from.getText(), "enter your password");
                 }
             });
 
@@ -209,12 +231,21 @@ public class Email extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_sendBtnActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        WelcomeJPanel welcomeJPanel = new WelcomeJPanel(CardSequencePanel);
+        CardSequencePanel.removeAll();
+        CardSequencePanel.add("welcome", welcomeJPanel);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea content;
     private javax.swing.JLabel contentLabel;
     private javax.swing.JTextField from;
     private javax.swing.JLabel fromLabel;
+    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JButton sendBtn;

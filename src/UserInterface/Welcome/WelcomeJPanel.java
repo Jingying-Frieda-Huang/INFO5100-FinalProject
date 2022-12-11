@@ -113,7 +113,7 @@ public class WelcomeJPanel extends javax.swing.JPanel {
 
     private void helpButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_helpButtonActionPerformed
         // TODO add your handling code here:
-        Email email = new Email();
+        Email email = new Email(CardSequencePanel);
         CardSequencePanel.removeAll();
         CardSequencePanel.add("Email", email);
         ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
