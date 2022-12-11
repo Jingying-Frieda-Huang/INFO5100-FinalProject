@@ -20,6 +20,7 @@ public class SponsorRequest {
     private int amount;
     private int eventId;
     private int sponsorId;
+    private int organizerId;
 
     public void setEventId(int eventId) {
         this.eventId = eventId;
@@ -30,6 +31,14 @@ public class SponsorRequest {
     }
 
     public SponsorRequest() { 
+    }
+
+    public int getOrganizerId() {
+        return organizerId;
+    }
+
+    public void setOrganizerId(int organizerId) {
+        this.organizerId = organizerId;
     }
 
     public Sponsor getSp() {

@@ -140,10 +140,25 @@ public class RegisterJPanel extends javax.swing.JPanel {
         String psw = tfPsw.getText();
         String role = String.valueOf(cbRole.getSelectedItem());
         
+
         registerDataValidation(name, email, psw, role);
         System.out.println(flag);
         if(flag == true) {
             insertUserAccount(name, email, psw, role);
+
+        try{  
+            Class.forName("com.mysql.cj.jdbc.Driver");  
+            Connection con=DriverManager.getConnection(  
+            "jdbc:mysql://localhost:3306/ems_5100","root","root");  
+            //here sonoo is database name, root is username and password  
+            String query = " insert into user_account (name, password, role, email)"
+            + " values ('"+name+"','"+ psw+ "','" + role + "','"+ email + "')";  
+            System.out.print(query);
+            PreparedStatement preparedStmt = con.prepareStatement(query);             
+            preparedStmt.execute();
+            con.close();  
+            }catch(Exception e){ System.out.println(e);}
+
          JOptionPane.showMessageDialog(this, "Register Successfully");
          
         LoginJPanel loginJPanel = new LoginJPanel(CardSequencePanel);

@@ -12,11 +12,18 @@ import java.util.ArrayList;
  */
 public class EventOrganizer {
 
+    UserAccount userAccount;
     Profile profile;
     ArrayList<Event> events;
     double revenue;
 
-    public EventOrganizer(Profile profile,  double revenue) {
+    public EventOrganizer(UserAccount userAccount, Profile profile, double revenue) {
+        this.userAccount = userAccount;
+        this.events = new ArrayList<>();
+        this.revenue = revenue;
+    }
+
+    public EventOrganizer(Profile profile, double revenue) {
         this.profile = profile;
         this.events = new ArrayList<>();
         this.revenue = revenue;
@@ -45,10 +52,6 @@ public class EventOrganizer {
     public void setRevenue(double revenue) {
         this.revenue = revenue;
     }
-    
-    
-    
-    
 
     public Event createNewEvent(Event event) {
         return event;

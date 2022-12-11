@@ -7,11 +7,8 @@ package UserInterface.Bank;
 import Model.Bank.Transfer;
 import Model.Database;
 import Model.TicketManager.PaymentRecord;
-import static java.lang.Integer.max;
-import static java.lang.Integer.min;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -37,6 +34,7 @@ public class ProcessTransfer extends javax.swing.JPanel {
     Transfer selectedTransfer;
     ArrayList<Transfer> transfers;
     Database database;
+    private String query;
     
     public ProcessTransfer(JPanel clp) {
         this.CardSequencePanel = clp;
@@ -169,11 +167,7 @@ public class ProcessTransfer extends javax.swing.JPanel {
         selectedTransfer.setState("completed");
         changeTransferState();
         populateTransferTable();
-        
-        
-        
-        
-        
+    
     }//GEN-LAST:event_btnGeneratePaymentRecordActionPerformed
 
     private void tblTransferMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblTransferMouseClicked
@@ -266,8 +260,19 @@ public class ProcessTransfer extends javax.swing.JPanel {
     }
     
     public void changeTransferState(){
-        
+        String query="";
         String sql = "UPDATE transfer " + "SET state = '" + "completed" + "' WHERE id = '" + selectedTransfer.getId()+ "';";
         database.update(sql);
+        
+        //update the request records as soon as transfer is completed so the same is reflected 
+        //to sponsor/venue models on their page 
+        if (selectedTransfer.getType() == "sponsorship"){
+            query= "update sponsor_request set status = 'Completed' where request_id = "+selectedTransfer.getRequestId();
+        }
+        else if (selectedTransfer.getType() == "venueBooking"){
+            query= "update venue_request set status = 'Completed' where request_id = "+selectedTransfer.getRequestId();
+        }
+        
+        database.update(query);
     }
 }

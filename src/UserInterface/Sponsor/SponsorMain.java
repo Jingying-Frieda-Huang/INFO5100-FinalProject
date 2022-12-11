@@ -5,6 +5,10 @@
 package UserInterface.Sponsor;
 
 import Model.Sponsor;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import javax.swing.JPanel;
 
 /**
@@ -132,8 +136,26 @@ public class SponsorMain extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
 
     private void populateMain() {
-        txtbztype.setText(sp.getBusiness_type());
-        dtDate.setDate(sp.getEst_date());
-        lblsponsorname.setText(sp.getName());
+        
+        try{  
+            Class.forName("com.mysql.cj.jdbc.Driver");  
+            Connection con=DriverManager.getConnection(  
+            "jdbc:mysql://localhost:3306/ems_5100","root","root");   
+            Statement stmt=con.createStatement();  
+//            sponsor id is the same as user id
+//            for all the models user id will be the identity
+            ResultSet rs=stmt.executeQuery("select * from sponsor where reg_id = " + sp.getUser().getUser_id());  
+            
+            while(rs.next()) {
+                txtbztype.setText(rs.getString("type"));
+                dtDate.setDate(rs.getDate("establish_date"));
+                
+            }
+            lblsponsorname.setText(sp.getName());
+//            lblFinance.setText(Integer.toString(venue.getUser().getFinance()));
+            
+            rs.close();
+            con.close();  
+        }catch(Exception e){ System.out.println(e);}
     }
 }

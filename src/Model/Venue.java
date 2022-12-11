@@ -15,6 +15,7 @@ public class Venue {
     private int capacity;
     private String type;
     private double cost;
+    UserAccount user;
 
     public Venue(int id, String name, String location, int capacity, String type, double cost) {
         this.id = id;
@@ -26,6 +27,18 @@ public class Venue {
     }
 
     public Venue() {
+    }
+
+    public Venue(UserAccount user) {
+        this.user = user;
+    }
+
+    public UserAccount getUser() {
+        return user;
+    }
+
+    public void setUser(UserAccount user) {
+        this.user = user;
     }
 
     public int getId() {

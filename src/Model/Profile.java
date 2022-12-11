@@ -14,7 +14,6 @@ public abstract class Profile {
 
     public Profile(Person p) {
         person = p;
-
     }
 
     public abstract String getRole();
