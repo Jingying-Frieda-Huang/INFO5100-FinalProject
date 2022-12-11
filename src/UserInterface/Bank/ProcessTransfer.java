@@ -147,7 +147,7 @@ public class ProcessTransfer extends javax.swing.JPanel {
         if(selectedTransfer.getType().equals("payment")){
             PaymentRecord record = new PaymentRecord();
             record.setId(selectedTransfer.getId()+(int)(Math.random()*100+1));
-            record.setCustomer(selectedTransfer.getReceiver());
+            record.setCustomer(selectedTransfer.getSender());
             record.setEvent(selectedTransfer.getEvent());
             record.setState("pending");
 
