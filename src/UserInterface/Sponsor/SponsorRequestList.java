@@ -8,6 +8,7 @@ import Model.Database;
 import Model.Event;
 import Model.Sponsor;
 import Model.SponsorRequest;
+import UserInterface.Welcome.WelcomeJPanel;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -75,7 +76,7 @@ public class SponsorRequestList extends javax.swing.JPanel {
             }
         });
 
-        jButton2.setText("View Event");
+        jButton2.setText("Logout");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -123,19 +124,19 @@ public class SponsorRequestList extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(96, 96, 96)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnAccept)
                         .addGap(18, 18, 18)
                         .addComponent(btnDeny))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jLabel1)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton1)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(jButton2))
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 524, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1)
+                        .addGap(100, 100, 100))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 524, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(343, 343, 343))
         );
         layout.setVerticalGroup(
@@ -144,14 +145,14 @@ public class SponsorRequestList extends javax.swing.JPanel {
                 .addGap(49, 49, 49)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(jButton1))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAccept)
-                    .addComponent(btnDeny))
+                    .addComponent(btnDeny)
+                    .addComponent(jButton2))
                 .addContainerGap(138, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -164,11 +165,15 @@ public class SponsorRequestList extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        SponsorEventDetails sponsorEventDetails = new SponsorEventDetails(CardSequencePanel);
-        CardSequencePanel.removeAll();
-        CardSequencePanel.add("Event Detail", sponsorEventDetails);
-        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+//        SponsorEventDetails sponsorEventDetails = new SponsorEventDetails(CardSequencePanel);
+//        CardSequencePanel.removeAll();
+//        CardSequencePanel.add("Event Detail", sponsorEventDetails);
+//        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
         
+        WelcomeJPanel welcomeJPanel = new WelcomeJPanel(CardSequencePanel);
+        CardSequencePanel.removeAll();
+        CardSequencePanel.add("welcome", welcomeJPanel);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
         
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -189,8 +194,8 @@ public class SponsorRequestList extends javax.swing.JPanel {
         }
         
         String sqlInsert = "insert into transfer (sender, receiver, "
-                    + "type, amount, state, event, request_id) values ("+ request.getEventId() +","+ 
-                    request.getSponsorId() +",'sponsorship'," + request.getAmount()+", 'pending',"
+                    + "type, amount, state, event, request_id) values ("+ request.getSponsorId() +","+ 
+                    request.getOrganizerId() +",'sponsorship'," + request.getAmount()+", 'pending',"
                     + request.getEventId() + ","+ request.getRequestId() +")";
         db.insert(sqlInsert);
         

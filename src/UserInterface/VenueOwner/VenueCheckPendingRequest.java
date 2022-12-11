@@ -8,6 +8,7 @@ import Model.Database;
 import Model.SponsorRequest;
 import Model.Venue;
 import Model.VenueRequest;
+import UserInterface.Welcome.WelcomeJPanel;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -59,6 +60,7 @@ public class VenueCheckPendingRequest extends javax.swing.JPanel {
         tblVenueReq = new javax.swing.JTable();
         btnAccept = new javax.swing.JButton();
         btnDecline = new javax.swing.JButton();
+        btnAccept1 = new javax.swing.JButton();
 
         jLabel1.setText("Welcome, Venue Owner");
 
@@ -100,23 +102,29 @@ public class VenueCheckPendingRequest extends javax.swing.JPanel {
             }
         });
 
+        btnAccept1.setText("Logout");
+        btnAccept1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAccept1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(48, 48, 48)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(48, 48, 48)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 602, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(138, 138, 138)
+                        .addComponent(btnAccept1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnAccept)
-                        .addGap(196, 196, 196)
-                        .addComponent(btnDecline)))
+                        .addGap(18, 18, 18)
+                        .addComponent(btnDecline))
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 602, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(68, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -129,9 +137,10 @@ public class VenueCheckPendingRequest extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnDecline)
-                    .addComponent(btnAccept))
+                    .addComponent(btnAccept)
+                    .addComponent(btnAccept1))
                 .addContainerGap(201, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -148,8 +157,8 @@ public class VenueCheckPendingRequest extends javax.swing.JPanel {
         VenueRequest request = (VenueRequest) model.getValueAt(selectedRow, 0);
         
         String sqlInsert = "insert into transfer (sender, receiver, "
-                    + "type, amount, state, event, request_id) values ("+ request.getEventId() +","+ 
-                    request.getVenueId() +",'venueBooking'," + request.getAmount()+", 'pending',"
+                    + "type, amount, state, event, request_id) values ("+ request.getOrganizerId()+","+ 
+                    request.getVenueId() +",'venueFee'," + request.getAmount()+", 'pending',"
                     + request.getEventId() + ","+ request.getRequestId() +")";
         db.insert(sqlInsert);
         
@@ -180,9 +189,17 @@ public class VenueCheckPendingRequest extends javax.swing.JPanel {
         populateRequestTable();
     }//GEN-LAST:event_btnDeclineActionPerformed
 
+    private void btnAccept1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAccept1ActionPerformed
+        WelcomeJPanel welcomeJPanel = new WelcomeJPanel(CardSequencePanel);
+        CardSequencePanel.removeAll();
+        CardSequencePanel.add("welcome", welcomeJPanel);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+    }//GEN-LAST:event_btnAccept1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAccept;
+    private javax.swing.JButton btnAccept1;
     private javax.swing.JButton btnDecline;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
