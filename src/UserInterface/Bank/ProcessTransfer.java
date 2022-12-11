@@ -91,7 +91,7 @@ public class ProcessTransfer extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(tblTransfer);
 
-        btnGeneratePaymentRecord.setText("Confirm payment and Generate record");
+        btnGeneratePaymentRecord.setText("Confirm payment");
         btnGeneratePaymentRecord.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGeneratePaymentRecordActionPerformed(evt);
@@ -114,15 +114,14 @@ public class ProcessTransfer extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(34, 34, 34)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 530, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(btnSearch))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addGap(143, 143, 143)
-                            .addComponent(btnGeneratePaymentRecord))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(107, 107, 107)
+                        .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(33, 33, 33)
+                        .addComponent(btnSearch))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(197, 197, 197)
+                        .addComponent(btnGeneratePaymentRecord)))
                 .addContainerGap(366, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(

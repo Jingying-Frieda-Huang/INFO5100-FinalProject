@@ -47,6 +47,7 @@ public class Sponsor {
         this.business_type = business_type;
     }
     
+
     public String getName(){
         return user.getName();
     }
