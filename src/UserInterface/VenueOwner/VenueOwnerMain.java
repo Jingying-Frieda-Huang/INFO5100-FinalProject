@@ -4,6 +4,14 @@
  */
 package UserInterface.VenueOwner;
 
+import Model.Venue;
+import Model.VenueOwner;
+import Model.VenueRequest;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
 import javax.swing.JPanel;
 
 /**
@@ -15,10 +23,17 @@ public class VenueOwnerMain extends javax.swing.JPanel {
     /**
      * Creates new form VenueOwnerMain
      */
+    Venue venue;
+    ArrayList<Venue> venueList;
+    
     javax.swing.JPanel CardSequencePanel;
-    public VenueOwnerMain(JPanel clp) {
+    public VenueOwnerMain(JPanel clp, Venue v) {
         this.CardSequencePanel = clp;
         initComponents();
+        
+        this.venue =v;
+        
+        populateVenueData();
     }
 
     /**
@@ -31,37 +46,24 @@ public class VenueOwnerMain extends javax.swing.JPanel {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        lblName = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        txtType = new javax.swing.JTextField();
+        txtCapacity = new javax.swing.JTextField();
+        txtLocation = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        txtCost = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        lblFinance = new javax.swing.JLabel();
 
         jLabel1.setText("Welcome, Venue Owner");
 
-        jLabel2.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
-        jLabel2.setText("<Name of the venue>");
-
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Location", "Type", "Capacity", "others"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane1.setViewportView(jTable1);
+        lblName.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
+        lblName.setText("<Name of the venue>");
 
         jButton1.setText("Check Request");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -77,6 +79,27 @@ public class VenueOwnerMain extends javax.swing.JPanel {
             }
         });
 
+        jLabel3.setText("Type:");
+
+        jLabel4.setText("Seat Capacity:");
+
+        jLabel5.setText("Location:");
+
+        txtType.setEditable(false);
+
+        txtCapacity.setEditable(false);
+
+        txtLocation.setEditable(false);
+
+        jLabel6.setText("Venue Cost:");
+
+        txtCost.setEditable(false);
+
+        jLabel7.setText("Revenue:");
+
+        lblFinance.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lblFinance.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -88,15 +111,36 @@ public class VenueOwnerMain extends javax.swing.JPanel {
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(66, 66, 66)
-                        .addComponent(jLabel2)
-                        .addGap(86, 86, 86)
-                        .addComponent(jButton1)
-                        .addGap(50, 50, 50)
-                        .addComponent(jButton2))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 576, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(50, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblName)
+                                .addGap(86, 86, 86)
+                                .addComponent(jButton1)
+                                .addGap(50, 50, 50)
+                                .addComponent(jButton2))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(txtCost))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(txtLocation))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(txtCapacity))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(txtType, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(153, 153, 153)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblFinance, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                .addContainerGap(73, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -105,12 +149,32 @@ public class VenueOwnerMain extends javax.swing.JPanel {
                 .addComponent(jLabel1)
                 .addGap(55, 55, 55)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
+                    .addComponent(lblName)
                     .addComponent(jButton2)
                     .addComponent(jButton1))
-                .addGap(49, 49, 49)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(86, Short.MAX_VALUE))
+                .addGap(55, 55, 55)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(txtCapacity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(txtLocation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(txtCost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addComponent(lblFinance, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap(164, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -119,14 +183,14 @@ public class VenueOwnerMain extends javax.swing.JPanel {
         CardSequencePanel.removeAll();
         CardSequencePanel.add("Venue Check available", venueOwnerCheckAvailability);
         ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-//        VenueCheckPendingRequest venueCheckPendingRequest = new VenueCheckPendingRequest(CardSequencePanel, new Venue());
-//        CardSequencePanel.removeAll();
-//        CardSequencePanel.add("Venue pending requests", venueCheckPendingRequest);
-//        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+        VenueCheckPendingRequest venueCheckPendingRequest = new VenueCheckPendingRequest(CardSequencePanel, venue);
+        CardSequencePanel.removeAll();
+        CardSequencePanel.add("Venue pending requests", venueCheckPendingRequest);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -135,8 +199,41 @@ public class VenueOwnerMain extends javax.swing.JPanel {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel lblFinance;
+    private javax.swing.JLabel lblName;
+    private javax.swing.JTextField txtCapacity;
+    private javax.swing.JTextField txtCost;
+    private javax.swing.JTextField txtLocation;
+    private javax.swing.JTextField txtType;
     // End of variables declaration//GEN-END:variables
+
+    private void populateVenueData() {
+        try{  
+            Class.forName("com.mysql.cj.jdbc.Driver");  
+            Connection con=DriverManager.getConnection(  
+            "jdbc:mysql://localhost:3306/ems_5100","root","root");   
+            Statement stmt=con.createStatement();  
+//            sponsor id is the same as user id
+//            for all the models user id will be the identity
+            ResultSet rs=stmt.executeQuery("select * from venue where reg_id = " + venue.getUser().getUser_id());  
+            
+            while(rs.next()) {
+                lblName.setText(rs.getString("name"));
+                txtType.setText(rs.getString("type"));
+                txtCapacity.setText(Integer.toString(rs.getInt("seat_capacity")));
+                txtLocation.setText(rs.getString("zip_code"));
+                txtCost.setText(Integer.toString(rs.getInt("cost")));
+            }
+            
+            lblFinance.setText(Integer.toString(venue.getUser().getFinance()));
+            
+            rs.close();
+            con.close();  
+        }catch(Exception e){ System.out.println(e);}
+    }
 }

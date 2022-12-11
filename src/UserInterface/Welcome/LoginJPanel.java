@@ -199,12 +199,12 @@ public class LoginJPanel extends javax.swing.JPanel {
 
 
 
+//            temporarily commented
 
-
-        Report report = new Report(CardSequencePanel);
-        CardSequencePanel.removeAll();
-        CardSequencePanel.add("report", report);
-        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+//        Report report = new Report(CardSequencePanel);
+//        CardSequencePanel.removeAll();
+//        CardSequencePanel.add("report", report);
+//        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
 
         
         }
@@ -244,7 +244,7 @@ public class LoginJPanel extends javax.swing.JPanel {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/final5100", "root", "root");
+                    "jdbc:mysql://localhost:3306/ems_5100", "root", "root");
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery("select * from user_account WHERE email ='" + email + "';");
 
@@ -289,12 +289,14 @@ public class LoginJPanel extends javax.swing.JPanel {
                 CardSequencePanel.removeAll();
                 CardSequencePanel.add("Sponsor", sponsorMain);
                 ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+                
             } else if (role.equalsIgnoreCase("Venue Service Provider")) {
                 Venue v = new Venue(userAccount);
-                VenueCheckPendingRequest venue = new VenueCheckPendingRequest(CardSequencePanel, v);
+                VenueOwnerMain venue = new VenueOwnerMain(CardSequencePanel, v);
                 CardSequencePanel.removeAll();
                 CardSequencePanel.add("Venue Owner", venue);
                 ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+                
             } else if (role == "customer") {
                 Customer customer = new Customer(userAccount);
                 CustomerMain customerMain = new CustomerMain(CardSequencePanel, customer);
@@ -312,6 +314,5 @@ public class LoginJPanel extends javax.swing.JPanel {
                 ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
             }
         }
-
     }
 }
