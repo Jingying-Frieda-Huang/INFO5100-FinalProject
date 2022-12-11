@@ -10,6 +10,8 @@ import Model.EventOrganizerProfile;
 import Model.Person;
 import Model.Sponsor;
 import Model.UserAccount;
+import Model.Venue;
+import Model.VenueOwner;
 import Model.Volunteer.Volunteer;
 import UserInterface.Bank.ProcessTransfer;
 import UserInterface.Customer.CustomerMain;
@@ -17,12 +19,14 @@ import UserInterface.EventOrganizer.EventOrganizerMainPage;
 import UserInterface.Report.Report;
 import UserInterface.Sponsor.SponsorMain;
 import UserInterface.TicketManager.TicketGenerate;
+import UserInterface.VenueOwner.VenueCheckPendingRequest;
 import UserInterface.VenueOwner.VenueOwnerMain;
 import UserInterface.Volunteer.VolunteerMain;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -149,11 +153,17 @@ public class LoginJPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+
         String email = tfEmail.getText();
         String psw = tfPassword.getText();
         String role = String.valueOf(cbRole.getSelectedItem());
-        authentication(email, psw, role);
+        
+        if(email.equals("") || psw.equals("")){
 
+            JOptionPane.showMessageDialog(this, "Please fill the account and password");
+        } else {
+
+        authentication(email, psw, role);
         //if you don't want to use userAccount, just write your page and it will works
 //        EventOrganizerMainPage eventOrganizerMainPage;
 //        eventOrganizerMainPage = new EventOrganizerMainPage(CardSequencePanel);
@@ -178,12 +188,15 @@ public class LoginJPanel extends javax.swing.JPanel {
 //        CardSequencePanel.removeAll();
 //        CardSequencePanel.add("bank generate payment record", ProcessTransfer);
 //        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+
 //        Report report = new Report(CardSequencePanel);
 //        CardSequencePanel.removeAll();
 //        CardSequencePanel.add("report", report);
 //        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
 
 
+        
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
@@ -287,5 +300,4 @@ public class LoginJPanel extends javax.swing.JPanel {
         }
 
     }
-
 }

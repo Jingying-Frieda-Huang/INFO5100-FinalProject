@@ -20,6 +20,7 @@ public class VenueRequest {
     Date requestDate;
     private int eventId;
     private int venueId;
+    private int amount;
 
     public VenueRequest() {
     }
@@ -78,6 +79,14 @@ public class VenueRequest {
 
     public void setVenueId(int venueId) {
         this.venueId = venueId;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 
     @Override

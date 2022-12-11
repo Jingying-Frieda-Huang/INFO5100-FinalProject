@@ -79,5 +79,26 @@ public class UserAccount {
         this.name = name;
     }
     
+    int finance;
+
+    public UserAccount(String user_id, String password, String role, String email, String name, int finance) {
+        this.user_id = user_id;
+        this.password = password;
+        this.role = role;
+        this.email = email;
+        this.name = name;
+        this.finance = finance;
+    }
+
+    public int getFinance() {
+        return finance;
+    }
+
+    public void setFinance(int finance) {
+        this.finance = finance;
+    }
+    
+    
+    
     
 }

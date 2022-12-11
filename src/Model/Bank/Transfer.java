@@ -16,7 +16,7 @@ public class Transfer {
     int amount;
     String state;
     String event;
-
+    String requestId;
 
      
     public Transfer(){}
@@ -87,10 +87,14 @@ public class Transfer {
         this.event = event;
     }
 
+    public String getRequestId() {
+        return requestId;
+    }
 
+    public void setRequestId(String requestId) {
+        this.requestId = requestId;
+    }
 
-    
-    
     
     public String toString() {
         return getId();

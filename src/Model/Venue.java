@@ -28,6 +28,18 @@ public class Venue {
     public Venue() {
     }
 
+    public Venue(UserAccount user) {
+        this.user = user;
+    }
+
+    public UserAccount getUser() {
+        return user;
+    }
+
+    public void setUser(UserAccount user) {
+        this.user = user;
+    }
+
     public int getId() {
         return id;
     }
