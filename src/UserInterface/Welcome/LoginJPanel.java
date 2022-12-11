@@ -13,6 +13,7 @@ import Model.Volunteer.Volunteer;
 import UserInterface.Bank.ProcessTransfer;
 import UserInterface.Customer.CustomerMain;
 import UserInterface.EventOrganizer.EventOrganizerMainPage;
+import UserInterface.Report.Report;
 import UserInterface.Sponsor.SponsorMain;
 import UserInterface.TicketManager.TicketGenerate;
 import UserInterface.VenueOwner.VenueOwnerMain;
@@ -173,6 +174,12 @@ public class LoginJPanel extends javax.swing.JPanel {
 //        CardSequencePanel.removeAll();
 //        CardSequencePanel.add("bank generate payment record", ProcessTransfer);
 //        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+
+        Report report = new Report(CardSequencePanel);
+        CardSequencePanel.removeAll();
+        CardSequencePanel.add("report", report);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+        
             
           
     }//GEN-LAST:event_jButton1ActionPerformed
