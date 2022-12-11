@@ -178,10 +178,10 @@ public class LoginJPanel extends javax.swing.JPanel {
 //        CardSequencePanel.removeAll();
 //        CardSequencePanel.add("bank generate payment record", ProcessTransfer);
 //        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
-        Report report = new Report(CardSequencePanel);
-        CardSequencePanel.removeAll();
-        CardSequencePanel.add("report", report);
-        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+//        Report report = new Report(CardSequencePanel);
+//        CardSequencePanel.removeAll();
+//        CardSequencePanel.add("report", report);
+//        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
 
 
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -281,6 +281,7 @@ public class LoginJPanel extends javax.swing.JPanel {
 
                 CardSequencePanel.removeAll();
                 CardSequencePanel.add("Event Organizer", eventOrgMain);
+                System.out.println("test");
                 ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
             }
         }

@@ -167,11 +167,20 @@ public class Event {
     int ticketPrice;
     String state;
     int year;
+    String day;
     String venue;
     String time;
+
+    public void setVenue(String venue) {
+        this.venue = venue;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
     
 
-    public Event(int event_id, String name, String eventOrganizer, Date date, String location, String sponsor, String customerCapacity, String volunteerCapacity, int ticketPrice, String state) {
+    public Event(int event_id, String name, String eventOrganizer, String day, Date date, String location, String sponsor, String customerCapacity, String volunteerCapacity, int ticketPrice, String state) {
         this.event_id = event_id;
         this.name = name;
         this.eventOrganizer = eventOrganizer;
@@ -182,11 +191,26 @@ public class Event {
         this.volunteerCapacity = volunteerCapacity;
         this.ticketPrice = ticketPrice;
         this.state = state;
-        
+        this.day = day;
+    }
+
+    public String getVenue() {
+        return venue;
+    }
+
+    public String getTime() {
+        return time;
     }
     
-    
 
+    public void setDay(String day) {
+        this.day = day;
+    }
+
+    public String getDay() {
+        return day;
+    }
+    
     public String getEventOrganizer() {
         return eventOrganizer;
     }

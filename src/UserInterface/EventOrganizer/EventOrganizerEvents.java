@@ -4,8 +4,18 @@
  */
 package UserInterface.EventOrganizer;
 
+import Model.Event;
 import Model.EventOrganizer;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -18,11 +28,79 @@ public class EventOrganizerEvents extends javax.swing.JPanel {
      */
     EventOrganizer eventOrganizer;
     javax.swing.JPanel CardSequencePanel;
+    ArrayList<Event> upcomingEvents, pastEvents;
+    DefaultTableModel model;
 
     public EventOrganizerEvents(JPanel clp, EventOrganizer eventOrganizer) {
         this.CardSequencePanel = clp;
         this.eventOrganizer = eventOrganizer;
+        upcomingEvents = new ArrayList<>();
+        pastEvents = new ArrayList<>();
         initComponents();
+
+        try {
+            String DB_URL = "jdbc:mysql://localhost:3306/final5100";
+            String USER = "root";
+            String PASS = "root";
+
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection(DB_URL, USER, PASS);
+            Statement stmt = con.createStatement();
+
+            ResultSet rs = stmt.executeQuery("select * from event");
+
+            while (rs.next()) {
+                String day = rs.getString("date");
+                String year = Integer.toString(rs.getInt("year"));
+                String formattedDate = year + "/" + day;
+
+                Event event = new Event();
+                event.setName(rs.getString("name"));
+                event.setYear(rs.getInt("year")); // Added New Column year to the table
+                event.setVenue(rs.getString("venue"));
+                event.setTime(rs.getString("time"));
+                event.setDay(rs.getString("date"));
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+                Date date = new Date();
+
+                try {
+                    Date d = sdf.parse(formattedDate);
+                    if (d.compareTo(sdf.parse(sdf.format(date))) < 0) {
+                        // This event occurs in the past 
+                        pastEvents.add(event);
+
+                    } else if (d.compareTo(sdf.parse(sdf.format(date))) > 0) {
+                        // This event occurs in the future
+                        upcomingEvents.add(event);
+                    }
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+
+            populateEventTable(pastEvents, jTable2);
+            populateEventTable(upcomingEvents, jTable1);
+
+            rs.close();
+            con.close();
+        } catch (ClassNotFoundException | SQLException e) {
+            System.out.println(e);
+        }
+    }
+
+    public void populateEventTable(ArrayList<Event> events, javax.swing.JTable table) {
+        model = (DefaultTableModel) table.getModel();
+        model.setRowCount(0);
+        for (Event event : events) {
+            Object[] row = new Object[4];
+            String date = Integer.toString(event.getYear()) + "/" + event.getDay();
+            row[0] = date;
+            row[1] = event.getName();
+            row[2] = event.getVenue();
+            row[3] = event.getTime();
+            model.addRow(row);
+        }
     }
 
     /**
