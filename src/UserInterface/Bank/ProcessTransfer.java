@@ -267,6 +267,7 @@ public class ProcessTransfer extends javax.swing.JPanel {
     }
     
     public void changeTransferState(){
+        String query="";
         String sql = "UPDATE transfer " + "SET state = '" + "completed" + "' WHERE id = '" + selectedTransfer.getId()+ "';";
         database.update(sql);
         
