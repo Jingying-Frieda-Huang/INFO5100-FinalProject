@@ -143,21 +143,33 @@ public class ProcessTransfer extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGeneratePaymentRecordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGeneratePaymentRecordActionPerformed
-
-        if(selectedTransfer.getType().equals("payment")){
+        String type = selectedTransfer.getType();
+        if(type.equals("payment")){
             PaymentRecord record = new PaymentRecord();
             record.setId(selectedTransfer.getId()+(int)(Math.random()*100+1));
-            record.setCustomer(selectedTransfer.getReceiver());
+            record.setCustomer(selectedTransfer.getSender());
             record.setEvent(selectedTransfer.getEvent());
             record.setState("pending");
-
-            generateRecord(record);
+            generateRecord(record);    
+            String sql = "UPDATE user_account " + "SET finance = finance + " + selectedTransfer.getAmount() + " WHERE user_id = " + selectedTransfer.getReceiver()+ ";";
+            database.update(sql);
+            String updateSender = "UPDATE user_account " + "SET finance = finance - " + selectedTransfer.getAmount() + " WHERE user_id = " + selectedTransfer.getSender()+ ";";
+            database.update(updateSender);
+            
             JOptionPane.showMessageDialog(this, "Transfer record generated successfully");
+            
+        } else if(type.equals("sponsorship") || type.equals("venue fee")) {
+            String updateReceiver = "UPDATE user_account " + "SET finance = finance + " + selectedTransfer.getAmount() + " WHERE user_id = " + selectedTransfer.getReceiver()+ ";";
+            System.out.println(updateReceiver);
+            database.update(updateReceiver);
+            String updateSender = "UPDATE user_account " + "SET finance = finance - " + selectedTransfer.getAmount() + " WHERE user_id = " + selectedTransfer.getSender()+ ";";
+            database.update(updateSender);
         } 
         
         
-        
+        selectedTransfer.setState("completed");
         changeTransferState();
+        populateTransferTable();
         
         
         
@@ -255,7 +267,7 @@ public class ProcessTransfer extends javax.swing.JPanel {
     }
     
     public void changeTransferState(){
-        selectedTransfer.setState("completed");
+        
         String sql = "UPDATE transfer " + "SET state = '" + "completed" + "' WHERE id = '" + selectedTransfer.getId()+ "';";
         database.update(sql);
     }
