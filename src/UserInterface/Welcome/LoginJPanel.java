@@ -10,6 +10,8 @@ import Model.EventOrganizerProfile;
 import Model.Person;
 import Model.Sponsor;
 import Model.UserAccount;
+import Model.Venue;
+import Model.VenueOwner;
 import Model.Volunteer.Volunteer;
 import UserInterface.Bank.ProcessTransfer;
 import UserInterface.Customer.CustomerMain;
@@ -17,6 +19,7 @@ import UserInterface.EventOrganizer.EventOrganizerMainPage;
 import UserInterface.Report.Report;
 import UserInterface.Sponsor.SponsorMain;
 import UserInterface.TicketManager.TicketGenerate;
+import UserInterface.VenueOwner.VenueCheckPendingRequest;
 import UserInterface.VenueOwner.VenueOwnerMain;
 import UserInterface.Volunteer.VolunteerMain;
 import java.sql.Connection;
@@ -286,5 +289,4 @@ public class LoginJPanel extends javax.swing.JPanel {
         }
 
     }
-
 }
