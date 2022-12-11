@@ -56,6 +56,19 @@ public class Sponsor {
         return user.getUser_id();
     }
 
+    public int getLic_no() {
+        return lic_no;
+    }
+
+    public void setLic_no(int lic_no) {
+        this.lic_no = lic_no;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    
     @Override
     public String toString() {
         return name;
