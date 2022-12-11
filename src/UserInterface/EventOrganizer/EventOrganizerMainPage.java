@@ -4,7 +4,7 @@
  */
 package UserInterface.EventOrganizer;
 
-import UserInterface.Welcome.RegisterJPanel;
+import Model.EventOrganizer;
 import javax.swing.JPanel;
 
 /**
@@ -17,9 +17,11 @@ public class EventOrganizerMainPage extends javax.swing.JPanel {
      * Creates new form EventOrganizerMainPage
      */
     javax.swing.JPanel CardSequencePanel;
-    
-    public EventOrganizerMainPage(JPanel clp) {
+    EventOrganizer eventOrganizer;
+
+    public EventOrganizerMainPage(JPanel clp, EventOrganizer eventOrganizer) {
         this.CardSequencePanel = clp;
+        this.eventOrganizer = eventOrganizer;
         initComponents();
     }
 
@@ -96,13 +98,13 @@ public class EventOrganizerMainPage extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(48, 48, 48)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
-                            .addComponent(jLabel2))))
+                            .addComponent(jLabel2)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addComponent(jLabel1)))
                 .addGap(82, 82, 82)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -137,7 +139,7 @@ public class EventOrganizerMainPage extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        EventOrganizerEvents eventOrganizerEvents = new EventOrganizerEvents(CardSequencePanel);
+        EventOrganizerEvents eventOrganizerEvents = new EventOrganizerEvents(CardSequencePanel, eventOrganizer);
         CardSequencePanel.removeAll();
         CardSequencePanel.add("Organizer Events", eventOrganizerEvents);
         ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);

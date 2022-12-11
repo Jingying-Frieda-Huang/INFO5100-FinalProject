@@ -6,7 +6,10 @@ package UserInterface.Welcome;
 
 import Model.Customer.Customer;
 import Model.Event;
+import Model.EventOrganizer;
+import Model.EventOrganizerProfile;
 import Model.Person;
+import Model.Profile;
 import Model.Sponsor;
 import Model.UserAccount;
 import Model.Volunteer.Volunteer;
@@ -210,7 +213,7 @@ public class LoginJPanel extends javax.swing.JPanel {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/ems_5100", "root", "root");
+                    "jdbc:mysql://localhost:3306/final5100", "root", "root");
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery("select * from user_account WHERE email ='" + email + "';");
 
@@ -265,6 +268,15 @@ public class LoginJPanel extends javax.swing.JPanel {
                 CustomerMain customerMain = new CustomerMain(CardSequencePanel, customer);
                 CardSequencePanel.removeAll();
                 CardSequencePanel.add("Customer", customerMain);
+                ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+            } else if (role == "event organizer") {
+                Person p = new Person(dbName, dbId);
+                EventOrganizerProfile eventOrgProfile = new EventOrganizerProfile(p);
+                EventOrganizer eventOrganizer = new EventOrganizer(userAccount, eventOrgProfile, 0);
+                EventOrganizerMainPage eventOrgMain = new EventOrganizerMainPage(CardSequencePanel, eventOrganizer);
+
+                CardSequencePanel.removeAll();
+                CardSequencePanel.add("Event Organizer", eventOrgMain);
                 ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
             }
         }

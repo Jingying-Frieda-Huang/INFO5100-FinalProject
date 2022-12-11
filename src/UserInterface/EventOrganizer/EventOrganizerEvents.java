@@ -4,6 +4,7 @@
  */
 package UserInterface.EventOrganizer;
 
+import Model.EventOrganizer;
 import javax.swing.JPanel;
 
 /**
@@ -15,9 +16,12 @@ public class EventOrganizerEvents extends javax.swing.JPanel {
     /**
      * Creates new form EventOrganizerEvents
      */
+    EventOrganizer eventOrganizer;
     javax.swing.JPanel CardSequencePanel;
-    public EventOrganizerEvents(JPanel clp) {
+
+    public EventOrganizerEvents(JPanel clp, EventOrganizer eventOrganizer) {
         this.CardSequencePanel = clp;
+        this.eventOrganizer = eventOrganizer;
         initComponents();
     }
 
@@ -44,6 +48,7 @@ public class EventOrganizerEvents extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
 
         jLabel1.setText("Welcome, Event Organizer");
 
@@ -117,6 +122,13 @@ public class EventOrganizerEvents extends javax.swing.JPanel {
 
         jButton6.setText("Delete");
 
+        jButton7.setText("Back");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -146,7 +158,8 @@ public class EventOrganizerEvents extends javax.swing.JPanel {
                                         .addGap(26, 26, 26)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                             .addComponent(jButton5)
-                                            .addComponent(jButton6))))))
+                                            .addComponent(jButton6)
+                                            .addComponent(jButton7))))))
                         .addGap(52, 52, 52)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
@@ -158,6 +171,9 @@ public class EventOrganizerEvents extends javax.swing.JPanel {
                     .addComponent(jLabel3)
                     .addContainerGap(609, Short.MAX_VALUE)))
         );
+
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton5, jButton6, jButton7});
+
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
@@ -184,8 +200,10 @@ public class EventOrganizerEvents extends javax.swing.JPanel {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(38, 38, 38)
                                 .addComponent(jButton5)
-                                .addGap(87, 87, 87)
-                                .addComponent(jButton6)))))
+                                .addGap(37, 37, 37)
+                                .addComponent(jButton6)
+                                .addGap(35, 35, 35)
+                                .addComponent(jButton7)))))
                 .addContainerGap(108, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
@@ -208,6 +226,14 @@ public class EventOrganizerEvents extends javax.swing.JPanel {
 
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        // TODO add your handling code here:
+        EventOrganizerMainPage eventOrgMainPage = new EventOrganizerMainPage(CardSequencePanel, eventOrganizer);
+        CardSequencePanel.removeAll();
+        CardSequencePanel.add("Event Organizer Main Page", eventOrgMainPage);
+        ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+    }//GEN-LAST:event_jButton7ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -216,6 +242,7 @@ public class EventOrganizerEvents extends javax.swing.JPanel {
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
