@@ -7,6 +7,7 @@ package UserInterface.Customer;
 import Model.Customer.Customer;
 import Model.Database;
 import Model.Event;
+import Model.TicketManager.Ticket;
 import Model.Volunteer.Volunteer;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -14,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import javax.swing.JPanel;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -36,6 +38,11 @@ public class CustomerMain extends javax.swing.JPanel {
     ArrayList<Event> events;
     Database database;
     
+    DefaultTableModel model1;
+    TableRowSorter tableRowSorter1;
+    Ticket ticket;
+    ArrayList<Ticket> tickets;
+    
 
     public CustomerMain(JPanel clp, Customer customer) {
         this.CardSequencePanel = clp;
@@ -43,10 +50,17 @@ public class CustomerMain extends javax.swing.JPanel {
         initComponents();
         
         database = new Database();
+        
         events = new ArrayList<>();
         dbGetEvent();
         populateEventTable();
         sort(model);
+        
+        tickets = new ArrayList<>();
+        dbGetTicket();
+        populateTicketTable();
+        sort1(model1);
+        
     }
 
     /**
@@ -63,7 +77,13 @@ public class CustomerMain extends javax.swing.JPanel {
         jScrollPane2 = new javax.swing.JScrollPane();
         tblEvent = new javax.swing.JTable();
         btnBuy = new javax.swing.JButton();
+        btnSearch = new javax.swing.JButton();
+        tfSearch = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblTicket = new javax.swing.JTable();
+        tfSearch1 = new javax.swing.JTextField();
+        btnSearch1 = new javax.swing.JButton();
 
         tblEvent.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -73,7 +93,7 @@ public class CustomerMain extends javax.swing.JPanel {
                 {null, null, null, null}
             },
             new String [] {
-                "Event", "Date", "Location", "Capacity"
+                "Event", "Date", "Location", "Price"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -98,6 +118,13 @@ public class CustomerMain extends javax.swing.JPanel {
             }
         });
 
+        btnSearch.setText("Search");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -105,9 +132,17 @@ public class CustomerMain extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(39, 39, 39)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 422, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(89, 89, 89)
-                .addComponent(btnBuy)
-                .addContainerGap(100, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(89, 89, 89)
+                        .addComponent(btnBuy)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(48, 48, 48)
+                        .addComponent(tfSearch, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnSearch)
+                        .addGap(26, 26, 26))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -117,22 +152,78 @@ public class CustomerMain extends javax.swing.JPanel {
                         .addGap(50, 50, 50)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(200, 200, 200)
+                        .addGap(130, 130, 130)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnSearch))
+                        .addGap(47, 47, 47)
                         .addComponent(btnBuy)))
-                .addContainerGap(74, Short.MAX_VALUE))
+                .addContainerGap(86, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Event", jPanel1);
+
+        tblTicket.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "TicketID", "Customer", "Event"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblTicket.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblTicketMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblTicket);
+
+        btnSearch1.setText("Search");
+        btnSearch1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearch1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 742, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(51, 51, 51)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(tfSearch1, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(43, 43, 43)
+                        .addComponent(btnSearch1)))
+                .addContainerGap(100, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 427, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(74, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 331, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(34, 34, 34))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(122, 122, 122)
+                .addComponent(tfSearch1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(35, 35, 35)
+                .addComponent(btnSearch1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Ticket", jPanel2);
@@ -163,14 +254,44 @@ public class CustomerMain extends javax.swing.JPanel {
         database.insert(insertsql);
     }//GEN-LAST:event_btnBuyActionPerformed
 
+    private void tblTicketMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblTicketMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tblTicketMouseClicked
+
+    private void btnSearch1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearch1ActionPerformed
+        String text = tfSearch1.getText();
+        if (text.trim().length() == 0) {
+            tableRowSorter1.setRowFilter(null);
+        } else {
+            tableRowSorter1.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+        }
+        tblTicket.getRowSorter();
+    }//GEN-LAST:event_btnSearch1ActionPerformed
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        String text = tfSearch.getText();
+        if (text.trim().length() == 0) {
+            myTableRowSorter.setRowFilter(null);
+        } else {
+            myTableRowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+        }
+        tblEvent.getRowSorter();
+    }//GEN-LAST:event_btnSearchActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuy;
+    private javax.swing.JButton btnSearch;
+    private javax.swing.JButton btnSearch1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable tblEvent;
+    private javax.swing.JTable tblTicket;
+    private javax.swing.JTextField tfSearch;
+    private javax.swing.JTextField tfSearch1;
     // End of variables declaration//GEN-END:variables
 
     public void dbGetEvent(){
@@ -188,8 +309,10 @@ public class CustomerMain extends javax.swing.JPanel {
                 event.setDate(rs.getDate("date"));
                 event.setLocation(rs.getNString("location"));
                 event.setEventOrganizer(rs.getString("event_organizer"));
-                event.setVolunteerCapacity(rs.getString("volunteer_capacity"));
+                event.setCustomerCapacity(rs.getString("customer_capacity"));
+                event.setTicketPrice(Integer.valueOf(rs.getString("price")));
                 events.add(event);
+                System.out.print(event.getLocation());
                 
             }
 
@@ -207,7 +330,7 @@ public class CustomerMain extends javax.swing.JPanel {
             row[0] = event;
             row[1] = event.getDate();
             row[2] = event.getLocation();
-            row[3] = event.getVolunteerCapacity();
+            row[3] = event.getTicketPrice();
             model.addRow(row);
         }
     }
@@ -215,6 +338,46 @@ public class CustomerMain extends javax.swing.JPanel {
     public void sort(DefaultTableModel model) {
         myTableRowSorter = new TableRowSorter(model);
         tblEvent.setRowSorter(myTableRowSorter);
+        
+    }
+    
+    public void dbGetTicket() {
+          try{  
+            Class.forName("com.mysql.cj.jdbc.Driver");  
+            Connection con=DriverManager.getConnection(  
+            "jdbc:mysql://localhost:3306/ems_5100","root","root");   
+            Statement stmt=con.createStatement();  
+            ResultSet rs=stmt.executeQuery("select * from ticket WHERE customer_id = " + Integer.valueOf(customer.getUserAccount().getUser_id()));  
+            
+            while(rs.next()) {
+                Ticket ticket = new Ticket();
+                ticket.setCustomerId(rs.getString("customer_id"));
+                ticket.setId(rs.getString("ticket_id"));
+                ticket.setEventId(rs.getString("event_id"));
+                tickets.add(ticket);           
+                
+            }
+
+            rs.close();
+            con.close();  
+            }catch(Exception e){ System.out.println(e);}  
+    }
+    
+    public void populateTicketTable() {
+        model1 = (DefaultTableModel) tblTicket.getModel();
+        model1.setRowCount(0);
+        for(Ticket ticket: tickets) {
+            Object[] row = new Object[3];
+            row[0] = ticket;
+            row[1] = ticket.getCustomerId();
+            row[2] = ticket.getEventId();
+            model1.addRow(row);
+        }
+    }
+    
+    public void sort1(DefaultTableModel model1) {
+        tableRowSorter1 = new TableRowSorter(model1);
+        tblTicket.setRowSorter(tableRowSorter1);
         
     }
 
