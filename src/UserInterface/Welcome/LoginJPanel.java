@@ -272,7 +272,7 @@ public class LoginJPanel extends javax.swing.JPanel {
                 dbName = rs.getString("name");
                 dbPsw = rs.getString("password");
                 dbRole = rs.getString("role");
-                if (password.equals(dbPsw) && role.equals(dbRole)) {
+                if (password.equals(dbPsw) && role.equalsIgnoreCase(dbRole)) {
                     flag = true;
                 }                
             }
@@ -301,17 +301,20 @@ public class LoginJPanel extends javax.swing.JPanel {
                     CardSequencePanel.removeAll();
                     CardSequencePanel.add("bank generate payment record", ProcessTransfer);
                     ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
-                } else if(role == "Sponsor"){
+                } else if(role.equalsIgnoreCase("Sponsor")){
                     Sponsor sponsor = new Sponsor(userAccount);
                     SponsorMain sponsorMain = new SponsorMain(CardSequencePanel, sponsor);
                     CardSequencePanel.removeAll();
                     CardSequencePanel.add("Sponsor", sponsorMain); 
                     ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
-                } else if(role == "Venue Service Provider"){
-                    VenueOwnerMain venueOwnerMain = new VenueOwnerMain(CardSequencePanel);
+                } else if(role.equalsIgnoreCase("Venue Service Provider")){
+                    
+                    Venue v = new Venue(userAccount);
+                    VenueOwnerMain venueOwnerMain = new VenueOwnerMain(CardSequencePanel, v);
                     CardSequencePanel.removeAll();
                     CardSequencePanel.add("Venue Owner", venueOwnerMain);                    
                     ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+                    
                 } else if(role == "customer"){
                     Customer customer = new Customer(userAccount);
                     CustomerMain customerMain = new CustomerMain(CardSequencePanel, customer);
