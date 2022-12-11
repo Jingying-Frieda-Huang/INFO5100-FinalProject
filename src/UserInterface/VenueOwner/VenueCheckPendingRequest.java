@@ -137,7 +137,7 @@ public class VenueCheckPendingRequest extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnDecline)
                     .addComponent(btnAccept)
                     .addComponent(btnAccept1))
@@ -157,8 +157,8 @@ public class VenueCheckPendingRequest extends javax.swing.JPanel {
         VenueRequest request = (VenueRequest) model.getValueAt(selectedRow, 0);
         
         String sqlInsert = "insert into transfer (sender, receiver, "
-                    + "type, amount, state, event, request_id) values ("+ request.getEventId() +","+ 
-                    request.getVenueId() +",'venueBooking'," + request.getAmount()+", 'pending',"
+                    + "type, amount, state, event, request_id) values ("+ request.getOrganizerId()+","+ 
+                    request.getVenueId() +",'venueFee'," + request.getAmount()+", 'pending',"
                     + request.getEventId() + ","+ request.getRequestId() +")";
         db.insert(sqlInsert);
         

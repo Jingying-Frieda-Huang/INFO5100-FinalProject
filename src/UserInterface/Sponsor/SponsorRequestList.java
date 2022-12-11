@@ -194,8 +194,8 @@ public class SponsorRequestList extends javax.swing.JPanel {
         }
         
         String sqlInsert = "insert into transfer (sender, receiver, "
-                    + "type, amount, state, event, request_id) values ("+ request.getEventId() +","+ 
-                    request.getSponsorId() +",'sponsorship'," + request.getAmount()+", 'pending',"
+                    + "type, amount, state, event, request_id) values ("+ request.getSponsorId() +","+ 
+                    request.getOrganizerId() +",'sponsorship'," + request.getAmount()+", 'pending',"
                     + request.getEventId() + ","+ request.getRequestId() +")";
         db.insert(sqlInsert);
         
