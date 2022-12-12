@@ -184,7 +184,7 @@ public class VenueCheckPendingRequest extends javax.swing.JPanel {
         DefaultTableModel model = (DefaultTableModel) tblVenueReq.getModel();
         SponsorRequest request = (SponsorRequest) model.getValueAt(selectedRow, 0);
         
-        String sqlUpdate = "update sponsor_request set status = 'Rejected' where request_id ="+ request.getRequestId();
+        String sqlUpdate = "update venue_request set status = 'Rejected' where request_id ="+ request.getRequestId();
         db.update(sqlUpdate);
         
         getAllRequests();
