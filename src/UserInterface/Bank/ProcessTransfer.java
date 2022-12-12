@@ -168,6 +168,7 @@ public class ProcessTransfer extends javax.swing.JPanel {
         
         selectedTransfer.setState("completed");
         changeTransferState();
+        updateEvent();
         populateTransferTable();
     
     }//GEN-LAST:event_btnGeneratePaymentRecordActionPerformed
@@ -276,5 +277,46 @@ public class ProcessTransfer extends javax.swing.JPanel {
         }
         
         database.update(query);
+    }
+
+    private void updateEvent() {
+        try{  
+            Class.forName("com.mysql.cj.jdbc.Driver");  
+            Connection con=DriverManager.getConnection(  
+            "jdbc:mysql://localhost:3306/ems_5100","root","root");  
+            //here sonoo is database name, root is username and password  
+            Statement stmt=con.createStatement(); 
+            
+            if(selectedTransfer.getType().equalsIgnoreCase("sponsorship")){
+                ResultSet sp=stmt.executeQuery("select * from sponsor_request where request_id = " + selectedTransfer.getRequestId());
+                
+                while(sp.next()) {
+                    int sponsorId = sp.getInt("sponsor_id");
+
+                    String sql = "update event set sponsor_id = " + Integer.toString(sponsorId) + "where event_id = " + selectedTransfer.getEvent();
+                    database.update(sql);
+                }
+            }else if(selectedTransfer.getType().equalsIgnoreCase("venueFee")){
+                ResultSet ve=stmt.executeQuery("select * from venue_request where request_id = " + selectedTransfer.getRequestId());
+                        
+                while(ve.next()){
+                    int venueId = ve.getInt("venue_id");
+
+                    ResultSet veq=stmt.executeQuery("select * from venue where reg_id = " + Integer.toString(venueId));
+
+                    while(veq.next()){
+                        String location = veq.getString("name");
+                       
+                        String sql = "update event set venue_id = " + Integer.toString(venueId) + ", "
+                                + " location = '"+ location +"' where event_id = " + selectedTransfer.getEvent();
+                        database.update(sql);
+                    }
+                }
+            }
+            
+
+            con.close();  
+            }catch(Exception e)
+        { System.out.println(e);}
     }
 }
