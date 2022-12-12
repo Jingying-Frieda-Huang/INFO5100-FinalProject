@@ -52,7 +52,6 @@ public class Database {
     public void insert(String insertSQL){
         try{  
             Class.forName(this.className);  
-            System.out.print(this.className);
             Connection con=DriverManager.getConnection(  
             this.url,this.user,this.password);   
             PreparedStatement preparedStmt = con.prepareStatement(insertSQL);             
@@ -64,6 +63,21 @@ public class Database {
     }
     
     
+    public void delete(String deleteSQL) {
+        try{
+            Class.forName(this.className);  
+            Connection con=DriverManager.getConnection(  
+            this.url,this.user,this.password);   
+            PreparedStatement preparedStmt = con.prepareStatement(deleteSQL);             
+            preparedStmt.execute();
+            preparedStmt.executeUpdate("commit");
+//            System.out.print("execute1");
+            con.close();  
+            }catch(Exception e){ System.out.println(e);}
+        }
+            
+        
+    }
     
-
-}
+    
+   

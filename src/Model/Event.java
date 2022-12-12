@@ -170,6 +170,7 @@ public class Event {
     String day;
     String venue;
     String time;
+    int budget;
 
     public void setVenue(String venue) {
         this.venue = venue;
@@ -178,6 +179,16 @@ public class Event {
     public void setTime(String time) {
         this.time = time;
     }
+
+    public int getBudget() {
+        return budget;
+    }
+
+    public void setBudget(int budget) {
+        this.budget = budget;
+    }
+    
+    
     
 
     public Event(int event_id, String name, String eventOrganizer, String day, Date date, String location, String sponsor, String customerCapacity, String volunteerCapacity, int ticketPrice, String state) {

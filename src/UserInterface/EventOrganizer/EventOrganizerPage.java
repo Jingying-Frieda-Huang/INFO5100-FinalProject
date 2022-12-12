@@ -47,6 +47,11 @@ public class EventOrganizerPage extends javax.swing.JPanel {
     Sponsor selectedSponsor;
     ArrayList<Sponsor> sponsors;
     
+    DefaultTableModel modelE;
+    TableRowSorter tableRowSorterE;
+    Event selectedEvent;
+    ArrayList<Event> events;
+    
     Event newEvent;
     
     
@@ -55,6 +60,7 @@ public class EventOrganizerPage extends javax.swing.JPanel {
     public EventOrganizerPage(JPanel clp, EventOrganizer eventOrganizer) {
         this.CardSequencePanel = clp;
         this.eventOrganizer = eventOrganizer;
+        System.out.println(eventOrganizer.getUserAccount().getUser_id());
         initComponents();
         
         database = new Database();
@@ -71,6 +77,12 @@ public class EventOrganizerPage extends javax.swing.JPanel {
         populateSponsorTable();
         tableRowSorterS = new TableRowSorter(modelS);
         tblSponsor.setRowSorter(tableRowSorterS);
+        
+        events = new ArrayList<>();
+        dbGetEvent();
+        populateEventTable();
+        tableRowSorterE = new TableRowSorter(modelE);
+        tblEvent.setRowSorter(tableRowSorterE);
        
         
     }
@@ -85,9 +97,6 @@ public class EventOrganizerPage extends javax.swing.JPanel {
     private void initComponents() {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanel1 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -113,38 +122,32 @@ public class EventOrganizerPage extends javax.swing.JPanel {
         btnRequestS = new javax.swing.JButton();
         tfS = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
-
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(jTable1);
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(58, 58, 58)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 425, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(382, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(59, 59, 59)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(144, Short.MAX_VALUE))
-        );
-
-        jTabbedPane1.addTab("Main", jPanel1);
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblEvent = new javax.swing.JTable();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
+        tfn = new javax.swing.JTextField();
+        tfid = new javax.swing.JTextField();
+        tfvc = new javax.swing.JTextField();
+        tfs = new javax.swing.JTextField();
+        tfv = new javax.swing.JTextField();
+        tfb = new javax.swing.JTextField();
+        tfl = new javax.swing.JTextField();
+        tfd = new javax.swing.JTextField();
+        tfstatus = new javax.swing.JTextField();
+        tfcc = new javax.swing.JTextField();
+        tftp = new javax.swing.JTextField();
+        btnDelete = new javax.swing.JButton();
 
         jLabel1.setText("Event name:");
 
@@ -285,7 +288,7 @@ public class EventOrganizerPage extends javax.swing.JPanel {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(303, 303, 303)
                         .addComponent(jButton1)))
-                .addContainerGap(150, Short.MAX_VALUE))
+                .addContainerGap(129, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -336,20 +339,287 @@ public class EventOrganizerPage extends javax.swing.JPanel {
                             .addComponent(tfS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
                 .addComponent(jButton1)
-                .addContainerGap(99, Short.MAX_VALUE))
+                .addContainerGap(120, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Create event", jPanel2);
+
+        tblEvent.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "name", "eventId", "date", "status"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblEvent.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblEventMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblEvent);
+
+        jLabel9.setText("id:");
+
+        jLabel10.setText("name:");
+
+        jLabel11.setText("sponsor:");
+
+        jLabel12.setText("venue:");
+
+        jLabel13.setText("budget:");
+
+        jLabel14.setText("volunteer capacity:");
+
+        jLabel15.setText("date:");
+
+        jLabel16.setText("location:");
+
+        jLabel17.setText("customer capacity:");
+
+        jLabel18.setText("ticket price:");
+
+        jLabel19.setText("status:");
+
+        tfn.setEditable(false);
+        tfn.setMinimumSize(new java.awt.Dimension(80, 23));
+        tfn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfnActionPerformed(evt);
+            }
+        });
+
+        tfid.setEditable(false);
+        tfid.setMinimumSize(new java.awt.Dimension(80, 23));
+        tfid.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfidActionPerformed(evt);
+            }
+        });
+
+        tfvc.setEditable(false);
+        tfvc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfvcActionPerformed(evt);
+            }
+        });
+
+        tfs.setEditable(false);
+        tfs.setMinimumSize(new java.awt.Dimension(80, 23));
+        tfs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfsActionPerformed(evt);
+            }
+        });
+
+        tfv.setEditable(false);
+        tfv.setMinimumSize(new java.awt.Dimension(80, 23));
+        tfv.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfvActionPerformed(evt);
+            }
+        });
+
+        tfb.setEditable(false);
+        tfb.setMinimumSize(new java.awt.Dimension(80, 23));
+        tfb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfbActionPerformed(evt);
+            }
+        });
+
+        tfl.setEditable(false);
+        tfl.setMinimumSize(new java.awt.Dimension(80, 23));
+        tfl.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tflActionPerformed(evt);
+            }
+        });
+
+        tfd.setEditable(false);
+        tfd.setMinimumSize(new java.awt.Dimension(80, 23));
+        tfd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfdActionPerformed(evt);
+            }
+        });
+
+        tfstatus.setEditable(false);
+        tfstatus.setMinimumSize(new java.awt.Dimension(80, 23));
+        tfstatus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfstatusActionPerformed(evt);
+            }
+        });
+
+        tfcc.setEditable(false);
+        tfcc.setMinimumSize(new java.awt.Dimension(80, 23));
+        tfcc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfccActionPerformed(evt);
+            }
+        });
+
+        tftp.setEditable(false);
+        tftp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tftpActionPerformed(evt);
+            }
+        });
+
+        btnDelete.setText("Delete");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(11, 11, 11)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel17)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(tfcc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel15)
+                                    .addComponent(jLabel14))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(tfvc)
+                                    .addComponent(tfd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(87, 87, 87)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel18, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(tfn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(tfid, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(tfs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(tfv, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(tfb, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(tftp, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
+                                    .addComponent(tfstatus, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(tfl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(321, 321, 321))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnDelete)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(29, 29, 29)
+                                .addComponent(jLabel19))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(20, 20, 20)
+                                .addComponent(jLabel16)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel15)
+                    .addComponent(tfd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel14)
+                    .addComponent(tfvc))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel17)
+                    .addComponent(tfcc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(111, 111, 111))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(48, 48, 48)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(tfid, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel10)
+                    .addComponent(tfn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel11)
+                    .addComponent(tfs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel12)
+                    .addComponent(tfv, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel13)
+                    .addComponent(tfb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel19)
+                    .addComponent(tfstatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel16)
+                    .addComponent(tfl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tftp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel18))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnDelete)
+                .addGap(102, 102, 102))
+        );
+
+        jTabbedPane1.addTab("Main", jPanel1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 844, Short.MAX_VALUE)
+                .addGap(26, 26, 26))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jTabbedPane1)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -418,13 +688,93 @@ public class EventOrganizerPage extends javax.swing.JPanel {
         database.insert(query);
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void tblEventMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblEventMouseClicked
+        int selectedRowIndex = tblEvent.getSelectedRow();
+        modelE = (DefaultTableModel) tblEvent.getModel();
+        selectedEvent = (Event)modelE.getValueAt(tblEvent.convertRowIndexToModel(selectedRowIndex), 0);
+        tfid.setText(String.valueOf(selectedEvent.getEvent_id()));
+        tfn.setText(selectedEvent.getName());
+        tfs.setText(selectedEvent.getSponsor());
+        tfv.setText(selectedEvent.getVenue());
+        tfb.setText(String.valueOf(selectedEvent.getBudget()));
+        tfvc.setText(selectedEvent.getVolunteerCapacity());
+        tfd.setText(String.valueOf(selectedEvent.getDate()));
+        tfl.setText(selectedEvent.getLocation());
+        tfcc.setText(selectedEvent.getCustomerCapacity());
+        tftp.setText(String.valueOf(selectedEvent.getTicketPrice()));
+        tfstatus.setText(selectedEvent.getState());
+        
+        
+        
+    }//GEN-LAST:event_tblEventMouseClicked
+
+    private void tfnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfnActionPerformed
+
+    private void tfidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfidActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfidActionPerformed
+
+    private void tfvcActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfvcActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfvcActionPerformed
+
+    private void tfsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfsActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfsActionPerformed
+
+    private void tfvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfvActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfvActionPerformed
+
+    private void tfbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfbActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfbActionPerformed
+
+    private void tflActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tflActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tflActionPerformed
+
+    private void tfdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfdActionPerformed
+
+    private void tfstatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfstatusActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfstatusActionPerformed
+
+    private void tfccActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfccActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tfccActionPerformed
+
+    private void tftpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tftpActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tftpActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+       String deletesql = "DELETE FROM event WHERE event_id = " + selectedEvent.getEvent_id()+";";
+       database.delete(deletesql);
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnRequestS;
     private javax.swing.JButton btnRequestVenue;
     private com.toedter.calendar.JDateChooser dateChooser;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -432,13 +782,14 @@ public class EventOrganizerPage extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tblEvent;
     private javax.swing.JTable tblSponsor;
     private javax.swing.JTable tblVenue;
     private javax.swing.JTextField tfCustomerCapacity;
@@ -448,7 +799,18 @@ public class EventOrganizerPage extends javax.swing.JPanel {
     private javax.swing.JTextField tfS;
     private javax.swing.JTextField tfSponsor;
     private javax.swing.JTextField tfVTCapacity;
+    private javax.swing.JTextField tfb;
+    private javax.swing.JTextField tfcc;
+    private javax.swing.JTextField tfd;
     private javax.swing.JTextField tfeventid;
+    private javax.swing.JTextField tfid;
+    private javax.swing.JTextField tfl;
+    private javax.swing.JTextField tfn;
+    private javax.swing.JTextField tfs;
+    private javax.swing.JTextField tfstatus;
+    private javax.swing.JTextField tftp;
+    private javax.swing.JTextField tfv;
+    private javax.swing.JTextField tfvc;
     // End of variables declaration//GEN-END:variables
 
 
@@ -523,6 +885,52 @@ public class EventOrganizerPage extends javax.swing.JPanel {
             row[1] = sponsor.getBusiness_type();
             row[2] = sponsor.getEst_date(); 
             modelS.addRow(row);
+        }
+    }
+    
+    
+    private void dbGetEvent() {
+        try{  
+            Class.forName("com.mysql.cj.jdbc.Driver");  
+            Connection con=DriverManager.getConnection(  
+            "jdbc:mysql://localhost:3306/ems_5100","root","root");   
+            Statement stmt=con.createStatement();  
+            ResultSet rs=stmt.executeQuery("select * from event WHERE event_organizer ='"+ eventOrganizer.getUserAccount().getUser_id()+"';");  
+            System.out.println("select * from event WHERE event_organizer ='"+ eventOrganizer.getUserAccount().getUser_id()+"';");
+          
+            
+            while(rs.next()) {
+                Event event = new Event();
+                event.setEvent_id(rs.getInt("event_id"));
+                event.setName(rs.getString("event_name"));
+                event.setDate(rs.getDate("date"));
+                event.setState(rs.getString("status"));
+                event.setSponsor(rs.getString("sponsor_id"));
+                event.setVenue(rs.getString("venue_id"));
+                event.setBudget(rs.getInt("budget"));
+                event.setVolunteerCapacity("volunteer_capacity");
+                event.setLocation(rs.getString("location"));
+                event.setEventOrganizer(rs.getString("event_organizer"));
+                event.setCustomerCapacity(rs.getString("customer_capacity"));
+                event.setTicketPrice(rs.getInt("price"));
+                events.add(event);
+            }
+            rs.close();
+            con.close();  
+            }catch(Exception e){ System.out.println(e);}  
+        
+    }
+    
+    private void populateEventTable() {
+        modelE = (DefaultTableModel) tblEvent.getModel();
+        modelE.setRowCount(0);
+        for(Event event: events) {
+            Object[] row = new Object[4];
+            row[0] = event;
+            row[1] = event.getEvent_id();
+            row[2] = event.getDate();
+            row[3] = event.getState();
+            modelE.addRow(row);
         }
     }
     
