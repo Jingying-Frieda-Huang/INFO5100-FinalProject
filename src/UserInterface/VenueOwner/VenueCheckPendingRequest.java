@@ -62,6 +62,8 @@ public class VenueCheckPendingRequest extends javax.swing.JPanel {
         btnDecline = new javax.swing.JButton();
         btnAccept1 = new javax.swing.JButton();
 
+        setBackground(new java.awt.Color(189, 212, 231));
+
         jLabel1.setText("Welcome, Venue Owner");
 
         jLabel2.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N

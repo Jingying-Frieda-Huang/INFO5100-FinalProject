@@ -70,6 +70,8 @@ public class TicketGenerate extends javax.swing.JPanel {
         jButton2 = new javax.swing.JButton();
         tfSearch = new javax.swing.JTextField();
 
+        setBackground(new java.awt.Color(189, 212, 231));
+
         tblPaymentRecord.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},

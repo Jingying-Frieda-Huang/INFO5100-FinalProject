@@ -67,6 +67,8 @@ public class SponsorRequestList extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblReq = new javax.swing.JTable();
 
+        setBackground(new java.awt.Color(189, 212, 231));
+
         jLabel1.setText("Welcome, Sponsor");
 
         jButton1.setText("View Organiser History");
