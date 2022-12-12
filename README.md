@@ -31,3 +31,5 @@ https://lucid.app/lucidchart/76873b1e-b61c-4e19-84dc-ec061bd1a541/edit?viewport_
 
 
 https://lucid.app/lucidchart/be7b0564-dc10-4e22-b56a-5cb53ddd9f9d/edit?viewport_loc=-147%2C41%2C1868%2C852%2C.Q4MUjXso07N&invitationId=inv_8c9f6dd5-3b4f-49a3-9343-2a481aefa023
+
+https://lucid.app/lucidchart/24e8655a-d65d-4d24-a606-429b67b81496/edit?invitationId=inv_17c357ab-cad4-4ddb-820c-1c20092fd0d5&referringApp=slack&page=HWEp-vi-RSFO#
