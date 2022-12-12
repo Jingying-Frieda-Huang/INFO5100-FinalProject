@@ -63,6 +63,8 @@ public class RegisterJPanel extends javax.swing.JPanel {
         tfEmail = new javax.swing.JTextField();
         cbRole = new javax.swing.JComboBox<>();
 
+        setBackground(new java.awt.Color(189, 212, 231));
+
         jLabel1.setText("Create new account");
 
         jLabel2.setText("Name");

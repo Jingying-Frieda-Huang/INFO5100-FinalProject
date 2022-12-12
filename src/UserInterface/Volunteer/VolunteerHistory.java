@@ -56,6 +56,8 @@ public class VolunteerHistory extends javax.swing.JPanel {
         jButton1 = new javax.swing.JButton();
         tfSearch = new javax.swing.JTextField();
 
+        setBackground(new java.awt.Color(189, 212, 231));
+
         tblEvent.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},

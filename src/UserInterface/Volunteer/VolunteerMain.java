@@ -65,6 +65,8 @@ public class VolunteerMain extends javax.swing.JPanel {
         tfSearch = new javax.swing.JTextField();
         lbVTHistory = new javax.swing.JLabel();
 
+        setBackground(new java.awt.Color(189, 212, 231));
+
         tblEvent.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},

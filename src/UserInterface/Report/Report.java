@@ -87,6 +87,8 @@ public class Report extends javax.swing.JPanel {
         jScrollPane3 = new javax.swing.JScrollPane();
         tblVolunteer = new javax.swing.JTable();
 
+        jPanel1.setBackground(new java.awt.Color(189, 212, 231));
+
         tblCustomer.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},

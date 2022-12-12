@@ -36,6 +36,8 @@ public class SponsorEventDetails extends javax.swing.JPanel {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
+        setBackground(new java.awt.Color(189, 212, 231));
+
         jLabel1.setText("Welcome, Sponsor");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(

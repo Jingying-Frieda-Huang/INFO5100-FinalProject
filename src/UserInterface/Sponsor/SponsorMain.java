@@ -48,6 +48,8 @@ public class SponsorMain extends javax.swing.JPanel {
         txtbztype = new javax.swing.JTextField();
         dtDate = new com.toedter.calendar.JDateChooser();
 
+        setBackground(new java.awt.Color(189, 212, 231));
+
         jLabel1.setText("Welcome, Sponsor");
 
         lblsponsorname.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N

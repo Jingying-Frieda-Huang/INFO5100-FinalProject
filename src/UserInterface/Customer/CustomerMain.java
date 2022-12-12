@@ -85,6 +85,8 @@ public class CustomerMain extends javax.swing.JPanel {
         tfSearch1 = new javax.swing.JTextField();
         btnSearch1 = new javax.swing.JButton();
 
+        jPanel1.setBackground(new java.awt.Color(189, 212, 231));
+
         tblEvent.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -162,6 +164,8 @@ public class CustomerMain extends javax.swing.JPanel {
         );
 
         jTabbedPane1.addTab("Event", jPanel1);
+
+        jPanel2.setBackground(new java.awt.Color(189, 212, 231));
 
         tblTicket.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

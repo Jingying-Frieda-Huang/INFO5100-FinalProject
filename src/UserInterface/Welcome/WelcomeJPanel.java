@@ -36,6 +36,8 @@ public class WelcomeJPanel extends javax.swing.JPanel {
         jButton2 = new javax.swing.JButton();
         helpButton = new javax.swing.JButton();
 
+        setBackground(new java.awt.Color(189, 212, 231));
+
         jLabel1.setText("Welcome to EventBook");
 
         jButton1.setText("Create an acount");

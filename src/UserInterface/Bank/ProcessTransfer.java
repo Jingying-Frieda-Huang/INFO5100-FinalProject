@@ -65,6 +65,8 @@ public class ProcessTransfer extends javax.swing.JPanel {
         tfSearch = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
 
+        setBackground(new java.awt.Color(189, 212, 231));
+
         tblTransfer.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
