@@ -49,7 +49,7 @@ public class Sponsor {
     
 
     public String getName(){
-        return user.getName();
+        return name;
     }
     
     public String getId(){

@@ -162,7 +162,7 @@ public class VolunteerMain extends javax.swing.JPanel {
         try{  
             Class.forName("com.mysql.cj.jdbc.Driver");  
             Connection con=DriverManager.getConnection(  
-            "jdbc:mysql://localhost:3306/final5100","root","root");  
+            "jdbc:mysql://localhost:3306/ems_5100","root","root");  
             Statement stmt=con.createStatement();             
             String sql = "UPDATE event " + "SET volunteer_capacity = '" + capacity + "' WHERE event_id = '" + selectedEvent.getEvent_id()+ "';";
             System.out.print(sql);

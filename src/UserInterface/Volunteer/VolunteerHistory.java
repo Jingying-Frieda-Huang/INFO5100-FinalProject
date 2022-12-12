@@ -33,6 +33,7 @@ public class VolunteerHistory extends javax.swing.JPanel {
     ArrayList<Event> events;
     
     public VolunteerHistory(JPanel clp, Volunteer volunteer) {
+        this.CardSequencePanel = clp;
         this.volunteer = volunteer;
         initComponents();
         
@@ -55,6 +56,7 @@ public class VolunteerHistory extends javax.swing.JPanel {
         tblEvent = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         tfSearch = new javax.swing.JTextField();
+        jButton2 = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(189, 212, 231));
 
@@ -86,6 +88,13 @@ public class VolunteerHistory extends javax.swing.JPanel {
             }
         });
 
+        jButton2.setText("back");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -101,11 +110,17 @@ public class VolunteerHistory extends javax.swing.JPanel {
                         .addGap(18, 18, 18)
                         .addComponent(jButton1)
                         .addGap(66, 66, 66))))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(jButton2)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(64, Short.MAX_VALUE)
+                .addContainerGap(23, Short.MAX_VALUE)
+                .addComponent(jButton2)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -125,9 +140,18 @@ public class VolunteerHistory extends javax.swing.JPanel {
         tblEvent.getRowSorter();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        VolunteerMain volunteerMain = new VolunteerMain(CardSequencePanel, volunteer);
+                    CardSequencePanel.removeAll();
+                    CardSequencePanel.add("volunteer", volunteerMain);
+                    ((java.awt.CardLayout) CardSequencePanel.getLayout()).next(CardSequencePanel);
+                
+    }//GEN-LAST:event_jButton2ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblEvent;
     private javax.swing.JTextField tfSearch;

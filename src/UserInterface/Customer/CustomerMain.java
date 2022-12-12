@@ -14,6 +14,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
@@ -254,8 +255,10 @@ public class CustomerMain extends javax.swing.JPanel {
     private void btnBuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuyActionPerformed
         String insertsql = " insert into transfer (sender, receiver, type, amount, state, event)"
             + " values ("+customer.getUserAccount().getUser_id()+","+ selectedEvent.getEventOrganizer()+ ","+ 
-                "'payment'"+ ","+ selectedEvent.getTicketPrice()+ ","+ "'pending'"+ "," + selectedEvent.getEvent_id()+")";  
+                "'payment'"+ ","+ selectedEvent.getTicketPrice()+ ","+ "'pending'"+ "," + selectedEvent.getEvent_id()+")"; 
+        System.out.println(insertsql);
         database.insert(insertsql);
+        JOptionPane.showMessageDialog(this, "ticket bought successfully!");
     }//GEN-LAST:event_btnBuyActionPerformed
 
     private void tblTicketMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblTicketMouseClicked
