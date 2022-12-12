@@ -227,6 +227,7 @@ public class VenueCheckPendingRequest extends javax.swing.JPanel {
                 spRequest.setStatus(rs.getString("status"));
                 spRequest.setAmount(rs.getInt("amount"));
                 spRequest.setRequestId(rs.getInt("request_id"));
+                spRequest.setOrganizerIid(rs.getInt("organiser_id"));
                 reqList.add(spRequest);
             }
 

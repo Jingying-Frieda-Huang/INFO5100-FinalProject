@@ -204,6 +204,7 @@ public class SponsorRequestList extends javax.swing.JPanel {
         String sqlUpdate = "update sponsor_request set status = 'Rejected' where request_id ="+ request.getRequestId();
         db.update(sqlUpdate);
         
+        getAllRequests();
         populateRequestTable();
     }//GEN-LAST:event_btnDenyActionPerformed
 
@@ -232,8 +233,9 @@ public class SponsorRequestList extends javax.swing.JPanel {
                 spRequest.setEventId(rs.getInt("event_id"));
                 spRequest.setSponsorId(rs.getInt("sponsor_id"));
                 spRequest.setAmount(rs.getInt("amount"));
-                spRequest.setStatus(rs.getString("Status"));
-                
+                spRequest.setStatus(rs.getString("status"));
+                spRequest.setOrganizerId(rs.getInt("organizer_id"));
+                spRequest.setRequestId(rs.getInt("request_id"));
                 reqList.add(spRequest);
                 
             }
