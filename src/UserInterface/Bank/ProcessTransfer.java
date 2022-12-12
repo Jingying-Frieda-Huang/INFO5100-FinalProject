@@ -242,7 +242,7 @@ public class ProcessTransfer extends javax.swing.JPanel {
                 transfer.setState(rs.getString("state"));
                 transfer.setType(rs.getString("type"));
                 transfer.setEvent(rs.getString("event"));
-                
+                transfer.setRequestId(rs.getString("request_id"));
                 
                 
                 System.out.println(transfer.getId());
@@ -269,10 +269,10 @@ public class ProcessTransfer extends javax.swing.JPanel {
         
         //update the request records as soon as transfer is completed so the same is reflected 
         //to sponsor/venue models on their page 
-        if (selectedTransfer.getType() == "sponsorship"){
+        if (selectedTransfer.getType().equalsIgnoreCase("sponsorship")){
             query= "update sponsor_request set status = 'Completed' where request_id = "+selectedTransfer.getRequestId();
         }
-        else if (selectedTransfer.getType() == "venueBooking"){
+        else if (selectedTransfer.getType().equalsIgnoreCase("venueFee")){
             query= "update venue_request set status = 'Completed' where request_id = "+selectedTransfer.getRequestId();
         }
         
@@ -293,9 +293,9 @@ public class ProcessTransfer extends javax.swing.JPanel {
                 while(sp.next()) {
                     int sponsorId = sp.getInt("sponsor_id");
 
-                    String sql = "update event set sponsor_id = " + Integer.toString(sponsorId) + "where event_id = " + selectedTransfer.getEvent();
+                    String sql = "update event set sponsor_id = " + Integer.toString(sponsorId) + " where event_id = " + selectedTransfer.getEvent();
                     database.update(sql);
-                }
+                 }
             }else if(selectedTransfer.getType().equalsIgnoreCase("venueFee")){
                 ResultSet ve=stmt.executeQuery("select * from venue_request where request_id = " + selectedTransfer.getRequestId());
                         

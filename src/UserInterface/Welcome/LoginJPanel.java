@@ -274,7 +274,9 @@ public class LoginJPanel extends javax.swing.JPanel {
                 dbRole = rs.getString("role");
                 if (password.equals(dbPsw) && role.equalsIgnoreCase(dbRole)) {
                     flag = true;
-                }                
+                }else{
+                    JOptionPane.showMessageDialog(this, "Invalid Username/Password.");
+                }            
             }
             rs.close();
             con.close();  
